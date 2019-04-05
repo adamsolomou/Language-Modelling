@@ -14,11 +14,6 @@ class LSTMCell:
     """
     A LSTM implementation in TensorFlow.
     """
-
-    @property
-    def summaries(self):
-        return [self.loss_summary, self.perplexity_summary]
-
     # TODO add properties
     def __init__(self, embedding_size, hidden_state_size, sentence_length, vocabulary_size, pad_symbol=3):
         """
@@ -85,10 +80,15 @@ class LSTMCell:
 
         with tf.name_scope('perplexity'):
             # multiplying with math.log(2) makes cross entropy with a base of 2
-            self.perplexity_per_sentence = tf.math.pow(loss_per_batch_sample * math.log(2), 2)
+            self.perplexity_per_sentence = tf.math.pow(tf.constant(2, dtype=tf.float32),
+                                                       loss_per_batch_sample / math.log(2))
             self.average_perplexity = tf.reduce_mean(self.perplexity_per_sentence)
 
             self.perplexity_summary = tf.summary.scalar('average_perplexity_per_sentence', self.average_perplexity)
 
         with tf.name_scope("output_probabilities"):
             self.output_probabilities = tf.nn.softmax(outputs)
+
+    @property
+    def summaries(self):
+        return [self.loss_summary, self.perplexity_summary]
