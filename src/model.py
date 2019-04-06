@@ -21,6 +21,7 @@ class LSTMCell:
     """
     A LSTM implementation in TensorFlow.
     """
+
     # TODO add properties
     def __init__(self, embedding_size, hidden_state_size, sentence_length,
                  vocabulary_size, down_project_size=None, pad_symbol=3):
@@ -47,17 +48,17 @@ class LSTMCell:
             sentence_embedding = tf.nn.embedding_lookup(self.input_embeddings, self.input_sentence,
                                                         name='sentence_embedding')
 
-        with tf.variable_scope("lstm"):
-            lstm_cell = tf.nn.rnn_cell.LSTMCell(hidden_state_size, state_is_tuple=True,
-                                                initializer=tf.contrib.layers.xavier_initializer())
+        with tf.name_scope("lstm"):
+            self.lstm_cell = tf.nn.rnn_cell.LSTMCell(hidden_state_size, state_is_tuple=True,
+                                                     initializer=tf.contrib.layers.xavier_initializer())
 
             # tuple of states for lstm
-            states = lstm_cell.zero_state(tf.shape(self.input_sentence)[0], tf.float32)
+            states = self.get_initial_state(tf.shape(self.input_sentence)[0])
 
             outputs = []
 
             for time in range(sentence_length - 1):
-                state_output, states = lstm_cell(sentence_embedding[:, time], states)
+                state_output, states = self.lstm_cell(sentence_embedding[:, time], states)
 
                 output_t = vocabulary_projection_layer(state_output, vocabulary_size, down_project_size, (time > 0))
 
@@ -93,6 +94,27 @@ class LSTMCell:
 
         with tf.name_scope("output_probabilities"):
             self.output_probabilities = tf.nn.softmax(outputs)
+
+        """
+        One step. Only supported when down_project_size is not None
+        """
+        if down_project_size is not None:
+            with tf.name_scope("one_step"):
+                self.one_step_word_index = tf.placeholder(tf.int32, [1], name="word_input")
+                self.one_step_state_1 = tf.placeholder(tf.float32, [1, hidden_state_size], name="hidden_state_1")
+                self.one_step_state_2 = tf.placeholder(tf.float32, [1, hidden_state_size], name="hidden_state_2")
+
+                word_embedding = tf.nn.embedding_lookup(self.input_embeddings, self.one_step_word_index,
+                                                        name='word_embedding')
+                one_step_output, self.one_step_new_state = self.lstm_cell(word_embedding, (self.one_step_state_1,
+                                                                                           self.one_step_state_2))
+                # word with the maximum probability
+                probabilities = vocabulary_projection_layer(one_step_output,
+                                                            vocabulary_size, down_project_size, True)
+                self.one_step_next_word = tf.argmax(probabilities, axis=1)
+
+    def get_initial_state(self, size):
+        return self.lstm_cell.zero_state(size, tf.float32)
 
     @property
     def summaries(self):

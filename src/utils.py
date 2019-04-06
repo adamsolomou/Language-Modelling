@@ -93,3 +93,57 @@ def dev_step(sentences_batches, lstm, global_step, session, valid_writer, verbos
     if verbose is not None:
         print(f'Evaluation average perplexity per across sentences is {np.sum(perplexities) / total_sentences:.3f} '
               f'at step {current_step}')
+
+
+def continue_sentence(sentence, session, lstm, inverse_vocab, eos_symbol, maximum_generated_length=20):
+    """
+    Continues the sentence provided according to the lstm model provided.
+
+    Parameters
+    ----------
+    sentence: list
+        list of integers corresponding to the token_ids
+    session: tf.Session()
+    lstm: LSTMCell
+    inverse_vocab: dict
+        token_ids to tokens mappings
+    eos_symbol: int
+        token_id of <eos>
+    maximum_generated_length: int
+        maximum sentence length to generate
+
+    Returns
+    -------
+    The generated sentence
+    """
+    generated_sentence = list(map(inverse_vocab.get, sentence))[1:]
+
+    # initial state
+    states = np.zeros((2, 1, 1024))
+
+    for word in sentence:
+        feed_dict = {lstm.one_step_word_index: [word], lstm.one_step_state_1: states[0],
+                     lstm.one_step_state_2: states[1]}
+        states, next_word = session.run([lstm.one_step_new_state, lstm.one_step_next_word], feed_dict)
+
+    # continue sentences
+    words_generated = 0
+    while True:
+        # next_word has size (1,)
+        # noinspection PyUnboundLocalVariable
+        next_word = next_word[0]
+
+        if next_word == eos_symbol:
+            break
+
+        generated_sentence.append(inverse_vocab[next_word])
+
+        words_generated += 1
+        if words_generated == maximum_generated_length:
+            break
+
+        feed_dict = {lstm.one_step_word_index: [next_word],
+                     lstm.one_step_state_1: states[0], lstm.one_step_state_2: states[1]}
+        states, next_word = session.run([lstm.one_step_new_state, lstm.one_step_next_word], feed_dict)
+
+    return ' '.join(generated_sentence)
