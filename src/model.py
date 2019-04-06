@@ -10,12 +10,20 @@ def weight_variable(name, shape, initializer=tf.contrib.layers.xavier_initialize
     return variable
 
 
+def vocabulary_projection_layer(input_, output_dimension, down_project_size, reuse):
+    with tf.variable_scope("output_layer", reuse=reuse):
+        if down_project_size is not None:
+            input_ = tf.layers.dense(input_, down_project_size, use_bias=True, name='down_projection_projection')
+        return tf.layers.dense(input_, output_dimension, use_bias=True, name='vocabulary_size_projection')
+
+
 class LSTMCell:
     """
     A LSTM implementation in TensorFlow.
     """
     # TODO add properties
-    def __init__(self, embedding_size, hidden_state_size, sentence_length, vocabulary_size, pad_symbol=3):
+    def __init__(self, embedding_size, hidden_state_size, sentence_length,
+                 vocabulary_size, down_project_size=None, pad_symbol=3):
         """
         Creates the lstm graph
 
@@ -25,6 +33,8 @@ class LSTMCell:
         hidden_state_size: int
         sentence_length: int
         vocabulary_size: int
+        down_project_size: int
+            size of down-projected hidden state before the application of the softmax
         pad_symbol: int
             token_id for the <pad> symbol
         """
@@ -33,13 +43,9 @@ class LSTMCell:
             self.input_sentence = tf.placeholder(tf.int32, shape=[None, sentence_length], name='input_sentence')
 
         with tf.name_scope('embedding'):
-            input_embeddings = weight_variable('input_embeddings', [vocabulary_size, embedding_size])
-            sentence_embedding = tf.nn.embedding_lookup(input_embeddings, self.input_sentence,
+            self.input_embeddings = weight_variable('input_embeddings', [vocabulary_size, embedding_size])
+            sentence_embedding = tf.nn.embedding_lookup(self.input_embeddings, self.input_sentence,
                                                         name='sentence_embedding')
-
-        with tf.name_scope('output_softmax'):
-            weights_softmax = weight_variable('weights_output', [hidden_state_size, vocabulary_size])
-            bias_softmax = weight_variable('bias_output', [1, vocabulary_size])
 
         with tf.variable_scope("lstm"):
             lstm_cell = tf.nn.rnn_cell.LSTMCell(hidden_state_size, state_is_tuple=True,
@@ -51,11 +57,9 @@ class LSTMCell:
             outputs = []
 
             for time in range(sentence_length - 1):
-                rnn_output, states = lstm_cell(sentence_embedding[:, time], states)
+                state_output, states = lstm_cell(sentence_embedding[:, time], states)
 
-                # make an final calculation at the end of the for loop?
-                with tf.name_scope('output_calculation'):
-                    output_t = tf.matmul(rnn_output, weights_softmax, name='matmul_output') + bias_softmax
+                output_t = vocabulary_projection_layer(state_output, vocabulary_size, down_project_size, (time > 0))
 
                 outputs.append(output_t)
 
@@ -72,6 +76,7 @@ class LSTMCell:
                                                                         labels=self.input_sentence[:, 1:],
                                                                         name="cross_entropy") * mask
 
+            # loss per sentence
             loss_per_batch_sample = tf.reduce_sum(total_loss, axis=1) / tf.reduce_sum(mask, axis=1)
 
             self.loss = tf.reduce_mean(loss_per_batch_sample)

@@ -1,5 +1,36 @@
-import numpy as np
+from gensim import models
 import tensorflow as tf
+import numpy as np
+
+
+def load_embedding(session, vocab, emb, path, dim_embedding, vocab_size):
+    """
+      session        Tensorflow session object
+      vocab          A dictionary mapping token strings to vocabulary IDs
+      emb            Embedding tensor of shape vocabulary_size x dim_embedding
+      path           Path to embedding file
+      dim_embedding  Dimensionality of the external embedding.
+    """
+
+    print("Loading external embeddings from %s" % path)
+
+    model = models.KeyedVectors.load_word2vec_format(path, binary=False)
+    external_embedding = np.zeros(shape=(vocab_size, dim_embedding))
+    matches = 0
+
+    for tok, idx in vocab.items():
+        if tok in model.vocab:
+            external_embedding[idx] = model[tok]
+            matches += 1
+        else:
+            print("%s not in embedding file" % tok)
+            external_embedding[idx] = np.random.uniform(low=-0.25, high=0.25, size=dim_embedding)
+
+    print("%d words out of %d could be loaded" % (matches, vocab_size))
+
+    pretrained_embeddings = tf.placeholder(tf.float32, [None, None])
+    assign_op = emb.assign(pretrained_embeddings)
+    session.run(assign_op, {pretrained_embeddings: external_embedding})  # here, embeddings are actually set
 
 
 def train_batch(sentences_batch, lstm, train_step, global_step, session, train_writer, summaries_merged):
@@ -48,24 +79,17 @@ def dev_step(sentences_batches, lstm, global_step, session, valid_writer, verbos
 
     current_step = tf.train.global_step(session, global_step)
 
-    # TODO hard coded tags to achieve average across batches results in same graph as train results
+    loss_tag = lstm.summaries[0].name.split(':')[0]
+    perplexity_tag = lstm.summaries[1].name.split(':')[0]
+
     summary_dev_loss = tf.Summary()
-    summary_dev_loss.value.add(tag="cross_entropy_loss/loss", simple_value=total_loss / total_batches)
+    summary_dev_loss.value.add(tag=loss_tag, simple_value=total_loss / total_batches)
     valid_writer.add_summary(summary_dev_loss, current_step)
 
     summary_dev_perplexity = tf.Summary()
-    summary_dev_perplexity.value.add(tag="perplexity/average_perplexity_per_sentence",
-                                     simple_value=total_perplexity / total_batches)
+    summary_dev_perplexity.value.add(tag=perplexity_tag, simple_value=total_perplexity / total_batches)
     valid_writer.add_summary(summary_dev_perplexity, current_step)
 
     if verbose is not None:
         print(f'Evaluation average perplexity per across sentences is {np.sum(perplexities) / total_sentences:.3f} '
               f'at step {current_step}')
-
-
-def continue_sentence(sentence, lstm):
-    raise NotImplementedError
-
-
-def load_embeddings():
-    raise NotImplementedError
