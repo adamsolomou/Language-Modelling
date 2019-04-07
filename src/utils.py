@@ -33,7 +33,7 @@ def load_embedding(session, vocab, emb, path, dim_embedding, vocab_size):
     session.run(assign_op, {pretrained_embeddings: external_embedding})  # here, embeddings are actually set
 
 
-def train_batch(sentences_batch, lstm, train_step, global_step, session, train_writer, summaries_merged):
+def train_batch(sentences_batch, lstm, train_step, global_step, session, summaries_merged, train_writer=None):
     """
     A single training step
     """
@@ -42,10 +42,11 @@ def train_batch(sentences_batch, lstm, train_step, global_step, session, train_w
     fetches = [lstm.loss, summaries_merged, train_step, global_step]
     loss, summary, _, step = session.run(fetches, feed_dict)
 
-    train_writer.add_summary(summary, step)
+    if train_writer is not None:
+        train_writer.add_summary(summary, step)
 
 
-def dev_step(sentences_batches, lstm, global_step, session, valid_writer, verbose=1):
+def dev_step(sentences_batches, lstm, global_step, session, valid_writer=None, verbose=1):
     """
     Evaluate perplexity across validation dataset
     Parameters
@@ -79,16 +80,18 @@ def dev_step(sentences_batches, lstm, global_step, session, valid_writer, verbos
 
     current_step = tf.train.global_step(session, global_step)
 
-    loss_tag = lstm.summaries[0].name.split(':')[0]
-    perplexity_tag = lstm.summaries[1].name.split(':')[0]
+    if valid_writer is not None:
+        # get names of existing summaries to see results on the same graph
+        loss_tag = lstm.summaries[0].name.split(':')[0]
+        perplexity_tag = lstm.summaries[1].name.split(':')[0]
 
-    summary_dev_loss = tf.Summary()
-    summary_dev_loss.value.add(tag=loss_tag, simple_value=total_loss / total_batches)
-    valid_writer.add_summary(summary_dev_loss, current_step)
+        summary_dev_loss = tf.Summary()
+        summary_dev_loss.value.add(tag=loss_tag, simple_value=total_loss / total_batches)
+        valid_writer.add_summary(summary_dev_loss, current_step)
 
-    summary_dev_perplexity = tf.Summary()
-    summary_dev_perplexity.value.add(tag=perplexity_tag, simple_value=total_perplexity / total_batches)
-    valid_writer.add_summary(summary_dev_perplexity, current_step)
+        summary_dev_perplexity = tf.Summary()
+        summary_dev_perplexity.value.add(tag=perplexity_tag, simple_value=total_perplexity / total_batches)
+        valid_writer.add_summary(summary_dev_perplexity, current_step)
 
     if verbose is not None:
         print(f'Evaluation average perplexity per across sentences is {np.sum(perplexities) / total_sentences:.3f} '
@@ -118,8 +121,8 @@ def continue_sentence(sentence, session, lstm, inverse_vocab, eos_symbol, maximu
     """
     generated_sentence = list(map(inverse_vocab.get, sentence))[1:]
 
-    # initial state
-    states = np.zeros((2, 1, 1024))
+    # initial state for a single word
+    states = np.zeros((lstm.state_size, 1, lstm.hidden_state_size))
 
     for word in sentence:
         feed_dict = {lstm.one_step_word_index: [word], lstm.one_step_state_1: states[0],

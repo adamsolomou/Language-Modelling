@@ -27,49 +27,37 @@ def get_batches(iterable, batch_size=64, do_shuffle=True):
 
 
 class DataProcessing:
-    vocab = None
-    inverse_vocab = None
-    data_train = None
-    data_validation = None
-    data_continuation = None
+    _vocab = None
+    _inverse_vocab = None
+    _train_sentences = None
+    _validation_sentences = None
+    _continuation_sentences = None
 
     def __init__(self, sentence_length, vocabulary_size):
-        self.sentence_length = sentence_length
-        self.vocabulary_size = vocabulary_size
-
-    @property
-    def train_corpus(self):
-        return self.data_train
-
-    @property
-    def validation_corpus(self):
-        return self.data_validation
-
-    @property
-    def continuation_corpus(self):
-        return self.data_continuation
+        self._sentence_length = sentence_length
+        self._vocabulary_size = vocabulary_size
 
     def preprocess_dataset(self, data_folder, train_file, validation_file, continuation_file=None):
-        self.data_train = self.read_data(data_folder, train_file)
-        self.data_validation = self.read_data(data_folder, validation_file)
+        self._train_sentences = self._read_data(data_folder, train_file)
+        self._validation_sentences = self._read_data(data_folder, validation_file)
 
         if continuation_file is not None:
-            self.data_continuation = self.read_data(data_folder, continuation_file, pad_to_sentence_length=False)
+            self._continuation_sentences = self._read_data(data_folder, continuation_file, pad_to_sentence_length=False)
 
-    def read_data(self, data_folder, file_name, pad_to_sentence_length=True):
+    def _read_data(self, data_folder, file_name, pad_to_sentence_length=True):
         """
         Preprocessing step for evaluation and test set. Tokenize sentences and encode base on create vocabulary
         """
-        tokenized_sentences = self.read_and_tokenize_sentences(data_folder, file_name)
-        if self.vocab is None:
-            self.construct_vocab(tokenized_sentences)
+        tokenized_sentences = self._read_and_tokenize_sentences(data_folder, file_name)
+        if self._vocab is None:
+            self._construct_vocab(tokenized_sentences)
 
         if pad_to_sentence_length:
-            return self.encode_text(tokenized_sentences, padding_size=self.sentence_length)
+            return self._encode_text(tokenized_sentences, padding_size=self._sentence_length)
         else:
-            return self.encode_text(tokenized_sentences)
+            return self._encode_text(tokenized_sentences)
 
-    def read_and_tokenize_sentences(self, data_folder, file_name):
+    def _read_and_tokenize_sentences(self, data_folder, file_name):
         """
         Reads corpus from specified location. Creates tokens per sentence by removing longer that allowed sentences.
 
@@ -92,14 +80,14 @@ class DataProcessing:
                 sentence_tokens = sentence.strip().split(" ")
 
                 # Ignore sentences longer than sentence_len - 2
-                if len(sentence_tokens) > self.sentence_length - 2:
+                if len(sentence_tokens) > self._sentence_length - 2:
                     continue
 
                 tokenized_sentences.append(sentence_tokens)
 
             return tokenized_sentences
 
-    def construct_vocab(self, tokenized_sentences, base_vocab=BASE_VOCAB):
+    def _construct_vocab(self, tokenized_sentences, base_vocab=BASE_VOCAB):
         """
         Associate each word in the vocabulary with a (unique) ID. Construct the vocabulary dictionary where keys
         correspond to (unique) words in the vocabulary and the values correspond to the unique ID of the word.
@@ -127,7 +115,7 @@ class DataProcessing:
             counter.update(tokenized_sentence)
 
         # Keep the vocab_size - (base_vocab size) most common words from the corpus
-        most_common = counter.most_common(self.vocabulary_size - len(base_vocab))
+        most_common = counter.most_common(self._vocabulary_size - len(base_vocab))
 
         # Initialize the vocabulary
         vocab = dict(base_vocab)
@@ -140,11 +128,11 @@ class DataProcessing:
             token_id += 1
 
         # token to token_id mappings
-        self.vocab = vocab
+        self._vocab = vocab
         # token_id to token mappings
-        self.inverse_vocab = {v: k for k, v in vocab.items()}
+        self._inverse_vocab = {v: k for k, v in vocab.items()}
 
-    def encode_text(self, tokenized_sentences, padding_size=None):
+    def _encode_text(self, tokenized_sentences, padding_size=None):
         """
         Encode words in the text in terms of their ID in the vocabulary. Sentences that are longer than 30 tokens
         (including <bos> and <eos> are ignored).
@@ -166,23 +154,43 @@ class DataProcessing:
             Each row corresponds to a sentence. Entries in a row are integers and correspond to the vocabulary word ID.
 
         """
-        data = []
+        encoded_sentences = []
 
         # Fill-in the data matrix
         for sentence_id, tokenized_sentence in enumerate(tokenized_sentences):
-            data_i = [self.vocab['<bos>']]
+            encoded_sentence = [self._vocab['<bos>']]
             length = 1
             for token in tokenized_sentence:
-                if token in self.vocab:
-                    data_i.append(self.vocab[token])  # Within-vocabulary
+                if token in self._vocab:
+                    encoded_sentence.append(self._vocab[token])  # Within-vocabulary
                 else:
-                    data_i.append(self.vocab['<unk>'])  # Out-of-vocabulary
+                    encoded_sentence.append(self._vocab['<unk>'])  # Out-of-vocabulary
 
                 length += 1
 
             if padding_size is not None:
-                data_i.append(self.vocab['<eos>'])  # End of sentence
-                data_i += [self.vocab['<pad>']] * (self.sentence_length - length - 1)
-            data.append(data_i)
+                encoded_sentence.append(self._vocab['<eos>'])  # End of sentence
+                encoded_sentence += [self._vocab['<pad>']] * (self._sentence_length - length - 1)
+            encoded_sentences.append(encoded_sentence)
 
-        return data
+        return encoded_sentences
+
+    @property
+    def train_corpus(self):
+        return self._train_sentences
+
+    @property
+    def validation_corpus(self):
+        return self._validation_sentences
+
+    @property
+    def continuation_corpus(self):
+        return self._continuation_sentences
+
+    @property
+    def vocab(self):
+        return self._vocab
+
+    @property
+    def inverse_vocab(self):
+        return self._inverse_vocab
