@@ -128,7 +128,7 @@ class LanguageModel(object):
 
         return self
 
-    def fit(self, x, val_data=None, epochs=1, batch_size=64, shuffle=True):
+    def fit(self, x, val_data, epochs=1, batch_size=64, shuffle=True):
         """
         Trains the model for a given number of epochs (iterations on a dataset).
 
@@ -157,6 +157,9 @@ class LanguageModel(object):
 
         # Define Optimizer
         self.optimizer()
+
+        # Saver
+        saver = tf.tf.train.Saver()
 
         # Initialize the variables 
         init = tf.global_variables_initializer()
@@ -204,7 +207,8 @@ class LanguageModel(object):
 
                         print('Mean perplexity for a validation batch at step %i: %f' %(i, sess.run(self.mean_perplexity, feed_dict={self._x: batch_x})))
 
-                print('Training loss at epoch %i: %f' %(epoch, e_train_loss))
+                print('Accumulated training loss at epoch %i: %f' %(epoch, e_train_loss))
+                print('Average training loss per step at epoch %i: %f' %(epoch, e_train_loss/train_steps))
 
                 valid_perp = []
 
@@ -227,13 +231,20 @@ class LanguageModel(object):
                 valid_perp.append(sess.run(self.mean_perplexity, feed_dict={self._x: batch_x}))
 
                 # Report validation loss and perplexity 
-                print('Validation loss at epoch %i: %f' %(epoch, e_valid_loss))
+                print('Accumulated validation loss at epoch %i: %f' %(epoch, e_valid_loss))
 
-                print('Mean perplexity over validation sentences at step %i: %f' %(i, np.mean(valid_perp)))
+                print('Mean perplexity over validation sentences at epoch %i: %f' %(epoch, np.mean(valid_perp)))
+
+            # Save model 
+
+            # TO BE FIXED SO THAT WE SAVE THE BEST MODEL!
+            save_path = saver.save(sess, "model.ckpt")
+
+            print("Model saved in path: %s" % save_path)
 
         return self
 
-    def evaluate(self, x, batch_size=64, verbose=False):
+    def evaluate(self, x, batch_size=64):
         """
         Compute loss and perplexity values for the model in test mode. 
 
@@ -244,9 +255,6 @@ class LanguageModel(object):
 
         batch_size : int
             Number of samples per gradient update. If unspecified, batch_size will default to 64.
-
-        verbose : Boolean
-            If True, perplexity results for each sentence are printed. 
 
         Returns:
         --------
@@ -262,36 +270,44 @@ class LanguageModel(object):
         mean_perplexity = []
         perplexity_per_sentence = [] 
 
-        for i in tqdm(range(n_steps)):
+        # Saver
+        saver = tf.train.Saver()
 
-            # Get mini-batch 
-            batch_x = x[i*batch_size:(i+1)*batch_size, :]
+        with tf.Session() as sess:
 
-            # Accumulate loss
+            # Restore trained model 
+            saver.restore(sess, "model.ckpt")
+            print("Model restored.")
+
+            for i in tqdm(range(n_steps)):
+
+                # Get mini-batch 
+                batch_x = x[i*batch_size:(i+1)*batch_size, :]
+
+                # Accumulate loss
+                loss += sess.run(self.loss, feed_dict={self._x: batch_x})
+
+                # Append mean perplexity for current minibatch 
+                mean_perplexity.append(sess.run(self.mean_perplexity, feed_dict={self._x: batch_x}))
+
+                # Append perplexity per sentence
+                perplexity_per_sentence = tf.concat([perplexity_per_sentence,
+                                                    sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0)
+
+
+            # Add loss and perplexity for the remaining test sentences
+            batch_x = x[n_steps*batch_size:, :]
+
             loss += sess.run(self.loss, feed_dict={self._x: batch_x})
 
-            # Append mean perplexity for current minibatch 
             mean_perplexity.append(sess.run(self.mean_perplexity, feed_dict={self._x: batch_x}))
 
-            # Append perplexity per sentence
+            # Compute average from all mini-batches
+            mean_perplexity = np.mean(mean_perplexity)
+
             perplexity_per_sentence = tf.concat([perplexity_per_sentence,
-                                                sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0)
+                                                    sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0)
 
-
-        # Add loss and perplexity for the remaining test sentences
-        batch_x = x[n_steps*batch_size:, :]
-
-        loss += sess.run(self.loss, feed_dict={self._x: batch_x})
-
-        mean_perplexity.append(sess.run(self.mean_perplexity, feed_dict={self._x: batch_x}))
-
-        # Compute average from all mini-batches
-        mean_perplexity = np.mean(mean_perplexity)
-
-        perplexity_per_sentence = tf.concat([perplexity_per_sentence,
-                                                sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0)
-
-        if verbose:
-            print(perplexity_per_sentence)
 
         return {'loss': loss, 'mean_perp': mean_perplexity, 'perp_per_sent': perplexity_per_sentence}
+
