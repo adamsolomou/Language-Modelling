@@ -130,8 +130,8 @@ def continue_sentence(sentence, session, lstm, inverse_vocab, eos_symbol, maximu
         states, next_word = session.run([lstm.one_step_new_state, lstm.one_step_next_word], feed_dict)
 
     # continue sentences
-    words_generated = 0
-    while True:
+    sentence_length = len(generated_sentence)
+    while sentence_length < maximum_generated_length:
         # next_word has size (1,)
         # noinspection PyUnboundLocalVariable
         next_word = next_word[0]
@@ -141,12 +141,11 @@ def continue_sentence(sentence, session, lstm, inverse_vocab, eos_symbol, maximu
 
         generated_sentence.append(inverse_vocab[next_word])
 
-        words_generated += 1
-        if words_generated == maximum_generated_length:
-            break
 
         feed_dict = {lstm.one_step_word_index: [next_word],
                      lstm.one_step_state_1: states[0], lstm.one_step_state_2: states[1]}
         states, next_word = session.run([lstm.one_step_new_state, lstm.one_step_next_word], feed_dict)
+        
+        words_generated += 1
 
     return ' '.join(generated_sentence)

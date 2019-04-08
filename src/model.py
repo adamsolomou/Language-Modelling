@@ -92,7 +92,6 @@ class LSTMCell:
             self._loss_summary = tf.summary.scalar('loss', self._loss)
 
         with tf.name_scope('perplexity'):
-            # dividing with math.log(2) makes cross entropy with a base of 2
             # noinspection PyUnresolvedReferences
             self._perplexity_per_sentence = tf.exp(loss_per_batch_sample)
             self._average_perplexity = tf.reduce_mean(self._perplexity_per_sentence)
