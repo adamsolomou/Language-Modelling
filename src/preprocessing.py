@@ -17,7 +17,7 @@ def fetch_data(train_file='sentences.train', valid_file='sentences.eval'):
 
     return (train, valid)
 
-def construct_vocab(corpus, vocab_size=20000, sentence_len=30 base_vocab={'<unk>': 0, '<bos>': 1, '<eos>': 2, '<pad>': 3}):
+def construct_vocab(corpus, vocab_size=20000, sentence_len=30, base_vocab={'<unk>': 0, '<bos>': 1, '<eos>': 2, '<pad>': 3}):
     """
     Associate each word in the vocabulary with a (unique) ID
 
