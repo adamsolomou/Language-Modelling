@@ -5,8 +5,8 @@ from tqdm import tqdm
 from sklearn import shuffle
 
 class LanguageModel(object):
-
-    def __init__(self, vocab, sentence_len, embedding_dim, hidden_size=512):
+    
+    def __init__(self, vocab, sentence_len=30, embedding_dim=100, hidden_size=512):
 
         self.vocab = vocab
         self.vocab_size = len(vocab)
