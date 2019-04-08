@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 
 from tqdm import tqdm
-from sklearn import shuffle
+from sklearn.utils import shuffle
 
 class LanguageModel(object):
     
