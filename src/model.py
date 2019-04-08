@@ -198,7 +198,7 @@ class LanguageModel(object):
 
                     if i % display_step == 0:
                         # Report validation perplexity on a randomly drawn minibatch 
-                        j = np.random.choice(valid_steps, size=1)
+                        j = np.random.choice(valid_steps)
 
                         batch_x = val_data[j*batch_size:(j+1)*batch_size, :]
 
