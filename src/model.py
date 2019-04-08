@@ -44,7 +44,7 @@ class LanguageModel(object):
                                     name="lstm_cell")
 
             # Initial state 
-            state = cell.zero_state(batch_size=None, dtype=tf.float32)
+            state = cell.zero_state(batch_size=tf.shape(self._x)[0], dtype=tf.float32)
 
             # Initialize parameters 
             total_loss = []
