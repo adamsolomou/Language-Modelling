@@ -128,7 +128,7 @@ class LanguageModel(object):
 
         return self
 
-    def fit(self, x, batch_size=64, epochs=1, val_data=None, shuffle=True):
+    def fit(self, x, val_data=None, epochs=1, batch_size=64, shuffle=True):
         """
         Trains the model for a given number of epochs (iterations on a dataset).
 

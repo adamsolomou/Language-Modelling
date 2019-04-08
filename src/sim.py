@@ -21,6 +21,6 @@ if __name__ == '__main__':
 
     model = model.LanguageModel(vocab=vocab)
 
-    model.fit(train_data)
+    model.fit(train_data, val_data=valid_data)
 
     model.evaluate(valid_data)
