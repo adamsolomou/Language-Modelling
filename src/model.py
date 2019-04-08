@@ -14,8 +14,10 @@ class LanguageModel(object):
         self.embedding_dim = embedding_dim
         self.hidden_size = hidden_size
 
+        # Construct the computational graph 
+        self._model_graph()
 
-    def model(self):
+    def _model_graph(self):
         """
         Construct the computational graph of the RNN
 
@@ -27,14 +29,14 @@ class LanguageModel(object):
 
         with tf.name_scope("Model"):
             # Input sentence
-            self.x_ = tf.placeholder(dtype=tf.int32, shape=[None, self.sentence_len], name="input_sentences")
+            self._x = tf.placeholder(dtype=tf.int32, shape=[None, self.sentence_len], name="input_sentences")
 
             # Embedding matrix 
             self.embeddings = tf.get_variable(name="embeddings", shape=[self.vocab_size, self.embedding_dim], 
                                 dtype=tf.float32, initializer=tf.initializers.random_uniform(-0.25, 0.25))
 
             # Embedding representation of input sentence
-            self.x = tf.nn.embedding_lookup(self.embeddings, self.x_) # [BATCH_SIZE, SENTENCE_LEN, EMBEDDING_DIM]
+            self.x = tf.nn.embedding_lookup(self.embeddings, self._x) # [BATCH_SIZE, SENTENCE_LEN, EMBEDDING_DIM]
 
             # LSTM cell
             cell = tf.nn.rnn_cell.LSTMCell(num_units=self.hidden_size, 
@@ -60,7 +62,7 @@ class LanguageModel(object):
                     word = self.x[:,t,:]
 
                     # Labels [BATCH_SIZE]
-                    labels = self.x_[:,t+1]
+                    labels = self._x[:,t+1]
 
                     # Cell call 
                     output, state = cell(word, state)
@@ -80,7 +82,7 @@ class LanguageModel(object):
                 total_loss = tf.transpose(total_loss)
 
                 # Ignore '<pad>' symbols in loss computation 
-                mask = tf.cast(tf.math.not_equal(self.x_[:,1:], self.vocab['<pad>']), dtype=tf.float32)
+                mask = tf.cast(tf.math.not_equal(self._x[:,1:], self.vocab['<pad>']), dtype=tf.float32)
 
                 total_loss = mask * total_loss
 
@@ -189,10 +191,10 @@ class LanguageModel(object):
                     batch_x = x[i*batch_size:(i+1)*batch_size, :]
 
                     # Training step 
-                    sess.run(self.train_step, feed_dict={x_: batch_x})
+                    sess.run(self.train_step, feed_dict={self._x: batch_x})
 
                     # Accumulate training loss
-                    e_train_loss += sess.run(self.loss, feed_dict={x_: batch_x})
+                    e_train_loss += sess.run(self.loss, feed_dict={self._x: batch_x})
 
                     if i % display_step == 0:
                         # Report validation perplexity on a randomly drawn minibatch 
@@ -200,7 +202,7 @@ class LanguageModel(object):
 
                         batch_x = val_data[j*batch_size:(j+1)*batch_size, :]
 
-                        print('Mean perplexity for a validation batch at step %i: %f' %(i, sess.run(self.mean_perplexity, feed_dict={x_: batch_x})))
+                        print('Mean perplexity for a validation batch at step %i: %f' %(i, sess.run(self.mean_perplexity, feed_dict={self._x: batch_x})))
 
                 print('Training loss at epoch %i: %f' %(epoch, e_train_loss))
 
@@ -212,17 +214,17 @@ class LanguageModel(object):
                     batch_x = val_data[i*batch_size:(i+1)*batch_size, :]
 
                     # Accumulate validation loss
-                    e_valid_loss += sess.run(self.loss, feed_dict={x_: batch_x})
+                    e_valid_loss += sess.run(self.loss, feed_dict={self._x: batch_x})
 
                     # Append mean perplexity for current minibatch 
-                    valid_perp.append(sess.run(self.mean_perplexity, feed_dict={x_: batch_x}))
+                    valid_perp.append(sess.run(self.mean_perplexity, feed_dict={self._x: batch_x}))
 
                 # Add loss and perplexity for the remaining validation sentences
                 batch_x = val_data[valid_steps*batch_size:, :]
 
-                e_valid_loss += sess.run(self.loss, feed_dict={x_: batch_x})
+                e_valid_loss += sess.run(self.loss, feed_dict={self._x: batch_x})
 
-                valid_perp.append(sess.run(self.mean_perplexity, feed_dict={x_: batch_x}))
+                valid_perp.append(sess.run(self.mean_perplexity, feed_dict={self._x: batch_x}))
 
                 # Report validation loss and perplexity 
                 print('Validation loss at epoch %i: %f' %(epoch, e_valid_loss))
@@ -266,28 +268,28 @@ class LanguageModel(object):
             batch_x = x[i*batch_size:(i+1)*batch_size, :]
 
             # Accumulate loss
-            loss += sess.run(self.loss, feed_dict={x_: batch_x})
+            loss += sess.run(self.loss, feed_dict={self._x: batch_x})
 
             # Append mean perplexity for current minibatch 
-            mean_perplexity.append(sess.run(self.mean_perplexity, feed_dict={x_: batch_x}))
+            mean_perplexity.append(sess.run(self.mean_perplexity, feed_dict={self._x: batch_x}))
 
             # Append perplexity per sentence
             perplexity_per_sentence = tf.concat([perplexity_per_sentence,
-                                                sess.run(self.perplexity_per_sentence, feed_dict={x_: batch_x})], axis=0)
+                                                sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0)
 
 
         # Add loss and perplexity for the remaining test sentences
         batch_x = x[n_steps*batch_size:, :]
 
-        loss += sess.run(self.loss, feed_dict={x_: batch_x})
+        loss += sess.run(self.loss, feed_dict={self._x: batch_x})
 
-        mean_perplexity.append(sess.run(self.mean_perplexity, feed_dict={x_: batch_x}))
+        mean_perplexity.append(sess.run(self.mean_perplexity, feed_dict={self._x: batch_x}))
 
         # Compute average from all mini-batches
         mean_perplexity = np.mean(mean_perplexity)
 
         perplexity_per_sentence = tf.concat([perplexity_per_sentence,
-                                                sess.run(self.perplexity_per_sentence, feed_dict={x_: batch_x})], axis=0)
+                                                sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0)
 
         if verbose:
             print(perplexity_per_sentence)
