@@ -177,7 +177,7 @@ class LanguageModel(object):
 
             for epoch in range(epochs):
 
-                print('Epoch %i' %i)
+                print('Epoch %i' %epoch)
 
                 if shuffle: 
                     x = shuffle(x)
