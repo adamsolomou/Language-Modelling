@@ -1,8 +1,8 @@
+import sklearn 
 import numpy as np 
 import tensorflow as tf
 
 from tqdm import tqdm
-from sklearn.utils import shuffle
 
 class LanguageModel(object):
     
@@ -180,7 +180,7 @@ class LanguageModel(object):
                 print('Epoch %i' %epoch)
 
                 if shuffle: 
-                    x = shuffle(x)
+                    x = sklearn.utils.shuffle(x)
 
                 e_train_loss = 0
                 e_valid_loss = 0
