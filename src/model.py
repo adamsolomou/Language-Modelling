@@ -194,12 +194,8 @@ class LanguageModel(object):
                     # Get mini-batch 
                     batch_x = x[i*batch_size:(i+1)*batch_size, :]
 
-                    print('check 1')
-
                     # Training step 
                     sess.run(self.train_step, feed_dict={self._x: batch_x}, options=run_options)
-
-                    print('check 2')
 
                     # Accumulate training loss
                     e_train_loss += sess.run(self.loss, feed_dict={self._x: batch_x})
@@ -209,14 +205,10 @@ class LanguageModel(object):
                         # Initialize perplexity tensor
                         perplexity_per_sentence = [] 
 
-                        print('check 3')
-
                         # Evaluate on validation data 
                         for j in range(valid_steps):
 
                             val_batch = val_data[j*batch_size:(j+1)*batch_size, :]
-
-                            print('got batch')
 
                             # Append perplexity per sentence
                             perplexity_per_sentence = tf.concat([perplexity_per_sentence,
@@ -224,7 +216,7 @@ class LanguageModel(object):
                                                                         feed_dict={self._x: val_batch})], axis=0)
 
                         # Add loss and perplexity for the remaining validation sentences
-                        val_batch = x[valid_steps*batch_size:, :]
+                        val_batch = val_data[valid_steps*batch_size:, :]
 
                         perplexity_per_sentence = tf.concat([perplexity_per_sentence,
                                                             sess.run(self.perplexity_per_sentence, feed_dict={self._x: val_batch})], axis=0)
