@@ -23,4 +23,16 @@ if __name__ == '__main__':
 
     model.fit(train_data, val_data=valid_data)
 
-    model.evaluate(valid_data)
+    val_res = model.evaluate(valid_data)
+
+    print('From evaluation method')
+
+    print('Accumulated validation loss: ', val_res['loss'])
+
+    with open('validation.perplexity', 'w') as f:
+        for res in val_res['perp_per_sent']:
+            f.write("%s\n" % res)
+
+
+    f.close()
+
