@@ -164,6 +164,8 @@ class LanguageModel(object):
         # Initialize the variables 
         init = tf.global_variables_initializer()
 
+        run_options = tf.RunOptions(report_tensor_allocations_upon_oom=True)
+
         with tf.Session() as sess:
             # Run the initializer
             sess.run(init)
@@ -192,11 +194,8 @@ class LanguageModel(object):
                     # Get mini-batch 
                     batch_x = x[i*batch_size:(i+1)*batch_size, :]
 
-                    run_options = tf.RunOptions(report_tensor_allocations_upon_oom = True)
-                    sess.run(op, feed_dict=batch_x, options=run_options)
-
                     # Training step 
-                    sess.run(self.train_step, feed_dict={self._x: batch_x})
+                    sess.run(self.train_step, feed_dict={self._x: batch_x}, options=run_options)
 
                     # Accumulate training loss
                     e_train_loss += sess.run(self.loss, feed_dict={self._x: batch_x})
