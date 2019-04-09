@@ -214,18 +214,20 @@ class LanguageModel(object):
                         # Evaluate on validation data 
                         for j in range(valid_steps):
 
-                            batch_x = val_data[j*batch_size:(j+1)*batch_size, :]
+                            val_batch = val_data[j*batch_size:(j+1)*batch_size, :]
+
+                            print('got batch')
 
                             # Append perplexity per sentence
                             perplexity_per_sentence = tf.concat([perplexity_per_sentence,
                                                                 sess.run(self.perplexity_per_sentence, 
-                                                                        feed_dict={self._x: batch_x})], axis=0)
+                                                                        feed_dict={self._x: val_batch})], axis=0)
 
                         # Add loss and perplexity for the remaining validation sentences
-                        batch_x = x[valid_steps*batch_size:, :]
+                        val_batch = x[valid_steps*batch_size:, :]
 
                         perplexity_per_sentence = tf.concat([perplexity_per_sentence,
-                                                            sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0)
+                                                            sess.run(self.perplexity_per_sentence, feed_dict={self._x: val_batch})], axis=0)
 
                         print('Average perplexity over validation sentences at step %i: %f' %(i, np.mean(perplexity_per_sentence)))
 
