@@ -313,7 +313,7 @@ class LanguageModel(object):
 
         return {'loss': loss, 'mean_perp': mean_perplexity, 'perp_per_sent': perplexity_per_sentence}
 
-    def _model_params(self):
-
+    def total_params(self):
+        # Compute the total number of parameters
         return np.sum([np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()])
 

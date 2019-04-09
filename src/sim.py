@@ -21,6 +21,8 @@ if __name__ == '__main__':
 
     model = model.LanguageModel(vocab=vocab)
 
+    print('Total number of parameters: ', model.total_params())
+
     model.fit(train_data, val_data=valid_data)
 
     val_res = model.evaluate(valid_data)
