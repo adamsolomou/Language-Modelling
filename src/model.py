@@ -221,7 +221,9 @@ class LanguageModel(object):
                         perplexity_per_sentence = tf.concat([perplexity_per_sentence,
                                                             sess.run(self.perplexity_per_sentence, feed_dict={self._x: val_batch})], axis=0)
 
-                        print('Average perplexity over validation sentences at step %i: %f' %(i, np.mean(perplexity_per_sentence)))
+                        mean_perplexity = tf.reduce_mean(perplexity_per_sentence)
+
+                        print('Average perplexity over validation sentences at step %i: %f' %(i, mean_perplexity.eval()))
 
                 print('Average training loss per step at epoch %i: %f' %(epoch, e_train_loss/train_steps))
 
@@ -245,8 +247,9 @@ class LanguageModel(object):
                                                     sess.run(self.perplexity_per_sentence, 
                                                             feed_dict={self._x: batch_x})], axis=0)
 
+                mean_perplexity = tf.reduce_mean(perplexity_per_sentence)
 
-                print('Mean perplexity over validation sentences at epoch %i: %f' %(epoch, np.mean(perplexity_per_sentence)))
+                print('Mean perplexity over validation sentences at epoch %i: %f' %(i, mean_perplexity.eval()))
 
             # TO BE FIXED SO THAT WE SAVE THE BEST MODEL!
             save_path = saver.save(sess, "model.ckpt")
@@ -311,9 +314,9 @@ class LanguageModel(object):
                                                     sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0)
 
             # Compute average from all mini-batches
-            mean_perplexity = np.mean(perplexity_per_sentence)
+            mean_perplexity = tf.reduce_mean(perplexity_per_sentence)
 
-        return {'loss': loss, 'mean_perp': mean_perplexity, 'perp_per_sent': perplexity_per_sentence}
+        return {'loss': loss, 'mean_perp': mean_perplexity.eval(), 'perp_per_sent': perplexity_per_sentence}
 
     def total_params(self):
         # Compute the total number of parameters
