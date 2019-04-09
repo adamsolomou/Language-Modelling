@@ -194,8 +194,12 @@ class LanguageModel(object):
                     # Get mini-batch 
                     batch_x = x[i*batch_size:(i+1)*batch_size, :]
 
+                    print('check 1')
+
                     # Training step 
                     sess.run(self.train_step, feed_dict={self._x: batch_x}, options=run_options)
+
+                    print('check 2')
 
                     # Accumulate training loss
                     e_train_loss += sess.run(self.loss, feed_dict={self._x: batch_x})
@@ -204,6 +208,8 @@ class LanguageModel(object):
                     if i % display_step == 0:
                         # Initialize perplexity tensor
                         perplexity_per_sentence = [] 
+
+                        print('check 3')
 
                         # Evaluate on validation data 
                         for j in range(valid_steps):
