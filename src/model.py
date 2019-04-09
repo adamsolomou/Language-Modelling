@@ -182,7 +182,7 @@ class LanguageModel(object):
 
             for epoch in range(epochs):
 
-                print('Epoch %i' %epoch)
+                print('Epoch %i' %(epoch+1))
 
                 if shuffle: 
                     x = sklearn.utils.shuffle(x)
@@ -225,7 +225,7 @@ class LanguageModel(object):
 
                         print('Average perplexity over validation sentences at step %i: %f' %(i, mean_perplexity.eval()))
 
-                print('Average training loss per step at epoch %i: %f' %(epoch, e_train_loss/train_steps))
+                print('Average training loss per step at epoch %i: %f' %((epoch+1), e_train_loss/train_steps))
 
                 perplexity_per_sentence = []
 
@@ -249,7 +249,7 @@ class LanguageModel(object):
 
                 mean_perplexity = tf.reduce_mean(perplexity_per_sentence)
 
-                print('Mean perplexity over validation sentences at epoch %i: %f' %(i, mean_perplexity.eval()))
+                print('Mean perplexity over validation sentences at epoch %i: %f' %((epoch+1), mean_perplexity.eval()))
 
             # TO BE FIXED SO THAT WE SAVE THE BEST MODEL!
             save_path = saver.save(sess, "model.ckpt")
@@ -310,15 +310,15 @@ class LanguageModel(object):
 
             loss += sess.run(self.loss, feed_dict={self._x: batch_x})
 
+            # Append and evaluate tensor (turn into numpy array)
             perplexity_per_sentence = tf.concat([perplexity_per_sentence,
-                                                    sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0)
+                                                    sess.run(self.perplexity_per_sentence, feed_dict={self._x: batch_x})], axis=0).eval()
 
-            # Compute average from all mini-batches
-            mean_perplexity = tf.reduce_mean(perplexity_per_sentence)
+            # Compute average from all mini-batches and evaluate tensor
+            mean_perplexity = tf.reduce_mean(perplexity_per_sentence).eval()
 
-        return {'loss': loss, 'mean_perp': mean_perplexity.eval(), 'perp_per_sent': perplexity_per_sentence}
+        return {'loss': loss, 'mean_perp': mean_perplexity, 'perp_per_sent': perplexity_per_sentence}
 
     def total_params(self):
         # Compute the total number of parameters
         return np.sum([np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()])
-
