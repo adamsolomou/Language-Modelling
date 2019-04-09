@@ -192,6 +192,9 @@ class LanguageModel(object):
                     # Get mini-batch 
                     batch_x = x[i*batch_size:(i+1)*batch_size, :]
 
+                    run_options = tf.RunOptions(report_tensor_allocations_upon_oom = True)
+                    sess.run(op, feed_dict=batch_x, options=run_options)
+
                     # Training step 
                     sess.run(self.train_step, feed_dict={self._x: batch_x})
 
