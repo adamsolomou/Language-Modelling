@@ -159,7 +159,7 @@ class LanguageModel(object):
         self.optimizer()
 
         # Saver
-        saver = tf.tf.train.Saver()
+        saver = tf.train.Saver()
 
         # Initialize the variables 
         init = tf.global_variables_initializer()
