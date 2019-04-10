@@ -123,9 +123,3 @@ def encode_text(corpus, vocab, sentence_len=30):
     data = data[:-long_count,:]
 
     return data
-
-if __name__ == '__main__':
-
-    train_corpus, valid_corpus = fetch_data()
-
-    encode_text(corpus=train_corpus, vocab=construct_vocab(train_corpus))
