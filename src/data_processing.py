@@ -1,5 +1,6 @@
 from sklearn.utils import shuffle
 import collections
+import os
 
 BASE_VOCAB = {'<unk>': 0, '<bos>': 1, '<eos>': 2, '<pad>': 3}
 
@@ -68,7 +69,7 @@ class DataProcessing:
         tokenized_sentences: list
             list of list of tokens for sentences with at most self.sentence_length - 2 tokens
         """
-        with open(data_folder + file_name, 'r') as f_data:
+        with open(os.path.join(data_folder, file_name), 'r') as f_data:
             tokenized_sentences = []
             for sentence in f_data.readlines():
                 sentence_tokens = sentence.strip().split(" ")

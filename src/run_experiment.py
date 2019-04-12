@@ -98,8 +98,6 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
             if not os.path.exists(checkpoint_dir):
                 os.makedirs(checkpoint_dir)
 
-            checkpoint_prefix = os.path.join(checkpoint_dir, "model")
-
             ####
             # Start training for the specified epochs
             ####
@@ -115,9 +113,9 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
                                                         do_shuffle=False), lstm, global_step, session)
 
                     average_perplexity = np.mean(perplexities)
-                    model_name = "model_exp-{}_epoch-{}_val-perplexity-{}".format(experiment_type, epoch + 1,
+                    model_name = "model_experiment-{}_epoch-{}_val-perplexity-{}".format(experiment_type, epoch + 1,
                                                                                   average_perplexity)
-                    path = saver.save(session, checkpoint_prefix + model_name)
+                    path = saver.save(session, os.path.join(checkpoint_dir, model_name))
 
                     print("Saved model checkpoint to {}".format(path))
 
@@ -126,12 +124,14 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
                         best_model = model_name
 
                 print('Done with epoch', epoch + 1)
+            
+            best_model = "modelmodel_exp-B_epoch-4_val-perplexity-67.52006851045576"
 
             if best_model is None:
                 raise Exception("Model has not been saved. Run for at least one epoch")
 
             print('Restoring best model', best_model)
-            saver.restore(session, best_model)
+            saver.restore(session, os.path.join(checkpoint_dir, best_model))
 
             # evaluate on test set
             perplexities = dev_step(get_batches(data_processing.test_corpus, batch_size=FLAGS.batch_size,
@@ -139,21 +139,23 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
 
             print('Perplexity on test_set is', np.mean(perplexities))
 
-            filename = "/perplexities-exp-{}".format(experiment_type)
-            print('Saving results to', save_results_folder + filename)
+            filename = "perplexities-exp-{}.out".format(experiment_type)
+            savefile = os.path.join(save_results_folder, filename)
+            print('Saving results to', savefile)
 
-            with open(save_results_folder + filename, 'w') as f:
+            with open(savefile, 'w') as f:
                 f.writelines(str(i) + '\n' for i in perplexities)
 
             if experiment_type == 'C':
                 continuation_sentences = continue_sentences(data_processing.continuation_corpus, session,
                                                             lstm, data_processing)
 
-                filename = "/continuation-sentences-exp-{}".format(experiment_type)
-                print('Saving results to', save_results_folder + filename)
+                filename = "continuation-sentences-exp-{}.out".format(experiment_type)
+                savefile = os.path.join(save_results_folder, filename)
+                print('Saving results to', savefile)
 
-                with open(save_results_folder + filename, 'w') as f:
-                    f.writelines(str(i) + '\n' for i in continuation_sentences )
+                with open(savefile, 'w') as f:
+                    f.writelines(str(i) + '\n' for i in continuation_sentences)
 
     print('Done')
 

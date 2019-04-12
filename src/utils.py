@@ -94,7 +94,7 @@ def dev_step(sentences_batches, lstm, global_step, session, valid_writer=None, v
         valid_writer.add_summary(summary_dev_perplexity, current_step)
 
     if verbose > 0:
-        print(f'Evaluation average perplexity per across sentences is {np.sum(perplexities) / total_sentences:.3f} '
+        print(f'Average perplexity across validation set is {np.sum(perplexities) / total_sentences:.3f} '
               f'at step {current_step}')
 
     return perplexities
@@ -105,7 +105,7 @@ def continue_sentence(sentence, session, lstm, data_processing, eos_symbol, maxi
     Continues the sentence provided according to the lstm model provided.
 
     Parameters
-    ----------t kuk = kvk
+    ----------
     sentence: list
         list of integers corresponding to the token_ids
     session: tf.Session()
