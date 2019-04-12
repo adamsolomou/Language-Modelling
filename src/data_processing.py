@@ -35,9 +35,8 @@ class DataProcessing:
         self._sentence_length = sentence_length
         self._vocabulary_size = vocabulary_size
 
-    def preprocess_dataset(self, data_folder, dataset_file, name_of_dataset, pad_to_sentence_length=True):
-        dataset = self._read_data(data_folder, dataset_file, pad_to_sentence_length=pad_to_sentence_length)
-        setattr(self, name_of_dataset, dataset)
+    def preprocess_dataset(self, data_folder, dataset_file, pad_to_sentence_length=True):
+        return self._read_data(data_folder, dataset_file, pad_to_sentence_length=pad_to_sentence_length)
 
     def _read_data(self, data_folder, file_name, pad_to_sentence_length=True):
         """

@@ -46,16 +46,16 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
     print(" ")
 
     data_processing = DataProcessing(FLAGS.sentence_length, FLAGS.max_vocabulary_size)
-    data_processing.preprocess_dataset(data_folder, 'sentences.train', 'train_corpus')
-    data_processing.preprocess_dataset(data_folder, 'sentences.eval', 'validation_corpus')
-    data_processing.preprocess_dataset(data_folder, 'sentences_test.txt', 'test_corpus')
-    data_processing.preprocess_dataset(data_folder, 'sentences.continuation', 'continuation_corpus',
-                                       pad_to_sentence_length=False)
+    train_corpus = data_processing.preprocess_dataset(data_folder, 'sentences.train')
+    validation_corpus = data_processing.preprocess_dataset(data_folder, 'sentences.eval')
+    test_corpus = data_processing.preprocess_dataset(data_folder, 'sentences_test.txt')
+    continuation_corpus = data_processing.preprocess_dataset(data_folder, 'sentences.continuation',
+                                                             pad_to_sentence_length=False)
 
-    print(f'Number of train sentences is \t\t{len(data_processing.train_corpus)}')
-    print(f'Number of validation sentences is \t{len(data_processing.validation_corpus)}')
-    print(f'Number of test sentences is \t\t{len(data_processing.test_corpus)}')
-    print(f'Number of continuation sentences is \t{len(data_processing.continuation_corpus)}')
+    print(f'Number of train sentences is \t\t{len(train_corpus)}')
+    print(f'Number of validation sentences is \t{len(validation_corpus)}')
+    print(f'Number of test sentences is \t\t{len(test_corpus)}')
+    print(f'Number of continuation sentences is \t{len(continuation_corpus)}')
     print(" ")
 
     best_perplexity = None
@@ -103,13 +103,13 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
             ####
             print('Start training...')
             for epoch in range(FLAGS.num_epochs):
-                for sentences_batch in get_batches(data_processing.train_corpus, batch_size=FLAGS.batch_size):
+                for sentences_batch in get_batches(train_corpus, batch_size=FLAGS.batch_size):
                     # run a single step
                     train_batch(sentences_batch, lstm, train_step, global_step, session, summaries_merged)
 
                 current_step = tf.train.global_step(session, global_step)
                 if current_step % FLAGS.checkpoint_every == 0:
-                    perplexities = dev_step(get_batches(data_processing.validation_corpus, batch_size=FLAGS.batch_size,
+                    perplexities = dev_step(get_batches(validation_corpus, batch_size=FLAGS.batch_size,
                                                         do_shuffle=False), lstm, global_step, session)
 
                     average_perplexity = np.mean(perplexities)
@@ -132,8 +132,8 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
             saver.restore(session, os.path.join(checkpoint_dir, best_model))
 
             # evaluate on test set
-            perplexities = dev_step(get_batches(data_processing.test_corpus, batch_size=FLAGS.batch_size,
-                                                do_shuffle=False), lstm, global_step, session, verbose=0)
+            perplexities = dev_step(get_batches(test_corpus, batch_size=FLAGS.batch_size, do_shuffle=False),
+                                    lstm, global_step, session, verbose=0)
 
             print('Perplexity on test_set is', np.mean(perplexities))
 
@@ -145,8 +145,7 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
                 f.writelines(str(i) + '\n' for i in perplexities)
 
             if experiment_type == 'C':
-                continuation_sentences = continue_sentences(data_processing.continuation_corpus, session,
-                                                            lstm, data_processing)
+                continuation_sentences = continue_sentences(continuation_corpus, session, lstm, data_processing)
 
                 filename = "continuation-sentences-exp-{}.out".format(experiment_type)
                 savefile = os.path.join(save_results_folder, filename)
