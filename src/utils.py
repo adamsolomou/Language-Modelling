@@ -105,7 +105,7 @@ def continue_sentence(sentence, session, lstm, data_processing, eos_symbol, maxi
     Continues the sentence provided according to the lstm model provided.
 
     Parameters
-    ----------
+    ----------t kuk = kvk
     sentence: list
         list of integers corresponding to the token_ids
     session: tf.Session()
@@ -140,6 +140,7 @@ def continue_sentence(sentence, session, lstm, data_processing, eos_symbol, maxi
         if next_word == eos_symbol:
             break
 
+        generated_length += 1
         generated_sentence.append(next_word)
 
         feed_dict = {lstm.one_step_word_index: [next_word],

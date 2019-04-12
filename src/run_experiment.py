@@ -14,22 +14,9 @@ device_name = tf.test.gpu_device_name()
 if device_name != '/device:GPU:0':
     raise SystemError('GPU device not found')
 
-
-# needed to avoid errors in this version of tensorflow
-tf.flags.DEFINE_string('f', '', 'kernel')
-
-tf.flags.DEFINE_integer("embedding_size", 100, "embedding size (default 100)")
-tf.flags.DEFINE_integer("batch_size", 64, "batch Size (default: 64)")
-tf.flags.DEFINE_integer("max_vocabulary_size", 20000, "Maximum vocabulary size (default: 20000)")
-tf.flags.DEFINE_integer("num_epochs", 5, "Number of training epochs (default: 10)")
-tf.flags.DEFINE_integer("checkpoint_every", 1, "Save model after this many epochs (default: 1)")
-tf.flags.DEFINE_integer("num_checkpoints", 10, "Number of checkpoints to store (default: 10)")
-tf.flags.DEFINE_integer("sentence_length", 30, "Maximum length of a sentence (default 30)")
-FLAGS = tf.app.flags.FLAGS
-
-
 def run_experiment(experiment_type, data_folder, save_model_folder, save_results_folder):
     """
+    Runs experiments and saves results
 
     Parameters
     ----------
@@ -37,10 +24,6 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
     data_folder
     save_model_folder
     save_results_folder
-
-    Returns
-    -------
-
     """
     def set_experiment_variables(hidden_state_size=512, down_project_size=None, load_embeddings=False):
         tf.flags.DEFINE_integer("hidden_state_size", hidden_state_size, "hidden state size (default 512)")
@@ -120,6 +103,7 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
             ####
             # Start training for the specified epochs
             ####
+            print('Start training...')
             for epoch in range(FLAGS.num_epochs):
                 for sentences_batch in get_batches(data_processing.train_corpus, batch_size=FLAGS.batch_size):
                     # run a single step
@@ -146,6 +130,7 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
             if best_model is None:
                 raise Exception("Model has not been saved. Run for at least one epoch")
 
+            print('Restoring best model', best_model)
             saver.restore(session, best_model)
 
             # evaluate on test set
@@ -175,26 +160,36 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
 
 if __name__ == '__main__':
 
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--exp", default='A', type=str, help='experiment type (A B C)')
-    parser.add_argument("--data_folder", default=None, type=str, help='data folder')
-    parser.add_argument("--save_model_folder", default=None, type=str, help='save model folder')
-    parser.add_argument("--save_results_folder", default=None, type=str, help='save results folder')
-    args = parser.parse_args()
+    # needed to avoid errors
+    tf.flags.DEFINE_string('f', '', 'kernel')
 
-    arg_experiment_type = args.exp.strip().upper()
-    arg_data_folder = args.data_folder.strip()
-    arg_save_model_folder = args.save_model_folder.strip()
-    arg_save_results_folder = args.save_results_folder.strip()
+    tf.flags.DEFINE_integer("embedding_size", 100, "embedding size (default 100)")
+    tf.flags.DEFINE_integer("batch_size", 64, "batch Size (default: 64)")
+    tf.flags.DEFINE_integer("max_vocabulary_size", 20000, "Maximum vocabulary size (default: 20000)")
+    tf.flags.DEFINE_integer("num_epochs", 5, "Number of training epochs (default: 10)")
+    tf.flags.DEFINE_integer("checkpoint_every", 1, "Save model after this many epochs (default: 1)")
+    tf.flags.DEFINE_integer("num_checkpoints", 10, "Number of checkpoints to store (default: 10)")
+    tf.flags.DEFINE_integer("sentence_length", 30, "Maximum length of a sentence (default 30)")
+    tf.flags.DEFINE_string("experiment", "A", "Experiment to run (default A)")
+    tf.flags.DEFINE_string("data_folder", None, "Data folder (default None)")
+    tf.flags.DEFINE_string("save_model_folder", None, "Folder to save the models (default None)")
+    tf.flags.DEFINE_string("save_results_folder", None, "Folder to save results (default None)")
 
-    if not os.path.exists(arg_data_folder):
-        raise OSError("Data directory", arg_data_folder, 'not found')
+    FLAGS = tf.app.flags.FLAGS
 
-    if not os.path.exists(arg_save_model_folder):
-        os.makedirs(arg_save_model_folder)
+    if FLAGS.data_folder is None or FLAGS.save_model_folder is None or FLAGS.save_results_folder is None:
+        raise SystemExit("Not all paths specified")
+    
+    print(" ")
+    print('Running experiment type:', FLAGS.experiment)
+    
+    if not os.path.exists(FLAGS.data_folder):
+        raise OSError("Data directory", FLAGS.data_folder, 'not found')
 
-    if not os.path.exists(arg_save_results_folder):
-        os.makedirs(arg_save_results_folder)
+    if not os.path.exists(FLAGS.save_model_folder):
+        os.makedirs(FLAGS.save_model_folder)
 
-    run_experiment(arg_experiment_type, arg_data_folder, arg_save_model_folder, arg_save_results_folder)
+    if not os.path.exists(FLAGS.save_results_folder):
+        os.makedirs(FLAGS.save_results_folder)
+
+    run_experiment(FLAGS.experiment, FLAGS.data_folder, FLAGS.save_model_folder, FLAGS.save_results_folder)
