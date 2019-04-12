@@ -125,8 +125,6 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
 
                 print('Done with epoch', epoch + 1)
             
-            best_model = "modelmodel_exp-B_epoch-4_val-perplexity-67.52006851045576"
-
             if best_model is None:
                 raise Exception("Model has not been saved. Run for at least one epoch")
 
