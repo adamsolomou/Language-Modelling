@@ -29,20 +29,14 @@ def get_batches(iterable, batch_size=64, do_shuffle=True):
 class DataProcessing:
     _vocab = None
     _inverse_vocab = None
-    _train_sentences = None
-    _validation_sentences = None
-    _continuation_sentences = None
 
     def __init__(self, sentence_length, vocabulary_size):
         self._sentence_length = sentence_length
         self._vocabulary_size = vocabulary_size
 
-    def preprocess_dataset(self, data_folder, train_file, validation_file, continuation_file=None):
-        self._train_sentences = self._read_data(data_folder, train_file)
-        self._validation_sentences = self._read_data(data_folder, validation_file)
-
-        if continuation_file is not None:
-            self._continuation_sentences = self._read_data(data_folder, continuation_file, pad_to_sentence_length=False)
+    def preprocess_dataset(self, data_folder, dataset_file, name_of_dataset, pad_to_sentence_length=True):
+        dataset = self._read_data(data_folder, dataset_file, pad_to_sentence_length=pad_to_sentence_length)
+        setattr(self, name_of_dataset, dataset)
 
     def _read_data(self, data_folder, file_name, pad_to_sentence_length=True):
         """
@@ -175,22 +169,19 @@ class DataProcessing:
 
         return encoded_sentences
 
-    @property
-    def train_corpus(self):
-        return self._train_sentences
+    def decode_sentence(self, sentence):
+        """
+        Parameters
+        ----------
+        sentence: list
+            List of token_ids, first token is <bos> and is ignored
 
-    @property
-    def validation_corpus(self):
-        return self._validation_sentences
-
-    @property
-    def continuation_corpus(self):
-        return self._continuation_sentences
+        Returns
+        -------
+        Generates an sentence omitting starting and ending symbols
+        """
+        return ' '.join(list(map(self._inverse_vocab.get, sentence))[1:])
 
     @property
     def vocab(self):
         return self._vocab
-
-    @property
-    def inverse_vocab(self):
-        return self._inverse_vocab

@@ -93,12 +93,14 @@ def dev_step(sentences_batches, lstm, global_step, session, valid_writer=None, v
         summary_dev_perplexity.value.add(tag=perplexity_tag, simple_value=total_perplexity / total_batches)
         valid_writer.add_summary(summary_dev_perplexity, current_step)
 
-    if verbose is not None:
+    if verbose > 0:
         print(f'Evaluation average perplexity per across sentences is {np.sum(perplexities) / total_sentences:.3f} '
               f'at step {current_step}')
 
+    return perplexities
 
-def continue_sentence(sentence, session, lstm, inverse_vocab, eos_symbol, maximum_generated_length=20):
+
+def continue_sentence(sentence, session, lstm, data_processing, eos_symbol, maximum_generated_length=20):
     """
     Continues the sentence provided according to the lstm model provided.
 
@@ -108,8 +110,7 @@ def continue_sentence(sentence, session, lstm, inverse_vocab, eos_symbol, maximu
         list of integers corresponding to the token_ids
     session: tf.Session()
     lstm: LSTMCell
-    inverse_vocab: dict
-        token_ids to tokens mappings
+    data_processing: DataProcessing
     eos_symbol: int
         token_id of <eos>
     maximum_generated_length: int
@@ -119,7 +120,7 @@ def continue_sentence(sentence, session, lstm, inverse_vocab, eos_symbol, maximu
     -------
     The generated sentence
     """
-    generated_sentence = list(map(inverse_vocab.get, sentence))[1:]
+    generated_sentence = sentence.copy()
 
     # initial state for a single word
     states = np.zeros((lstm.state_size, 1, lstm.hidden_state_size))
@@ -129,9 +130,9 @@ def continue_sentence(sentence, session, lstm, inverse_vocab, eos_symbol, maximu
                      lstm.one_step_state_2: states[1]}
         states, next_word = session.run([lstm.one_step_new_state, lstm.one_step_next_word], feed_dict)
 
-    # continue sentences
-    sentence_length = len(generated_sentence)
-    while sentence_length < maximum_generated_length:
+    # length of sentence so far omitting <bos> at the beginning
+    generated_length = len(sentence) - 1
+    while generated_length < maximum_generated_length:
         # next_word has size (1,)
         # noinspection PyUnboundLocalVariable
         next_word = next_word[0]
@@ -139,13 +140,32 @@ def continue_sentence(sentence, session, lstm, inverse_vocab, eos_symbol, maximu
         if next_word == eos_symbol:
             break
 
-        generated_sentence.append(inverse_vocab[next_word])
-
+        generated_sentence.append(next_word)
 
         feed_dict = {lstm.one_step_word_index: [next_word],
                      lstm.one_step_state_1: states[0], lstm.one_step_state_2: states[1]}
         states, next_word = session.run([lstm.one_step_new_state, lstm.one_step_next_word], feed_dict)
-        
-        words_generated += 1
 
-    return ' '.join(generated_sentence)
+    return data_processing.decode_sentence(generated_sentence)
+
+
+def continue_sentences(corpus, session, lstm, data_processing):
+    """
+    Parameters
+    ----------
+    corpus: iterable
+        iterable of tokenized sentences
+    session: tf.Session()
+    lstm: LSTMCell
+    data_processing: DataProcessing
+
+    Returns
+    -------
+    A list of sentences
+    """
+    new_sentences = []
+    for sentence in corpus:
+        new_sentence = continue_sentence(sentence, session, lstm, data_processing, data_processing.vocab['<eos>'])
+        new_sentences.append(new_sentence)
+
+    return new_sentences

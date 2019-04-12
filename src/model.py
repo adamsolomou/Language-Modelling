@@ -1,5 +1,4 @@
 import tensorflow as tf
-import math
 
 
 def weight_variable(name, shape, initializer=tf.contrib.layers.xavier_initializer()):
@@ -22,8 +21,13 @@ class LSTMCell:
     A LSTM implementation in TensorFlow.
     """
 
-    def __init__(self, embedding_size, hidden_state_size, sentence_length,
-                 vocabulary_size, down_project_size=None, pad_symbol=3):
+    def __init__(self,
+                 embedding_size,
+                 hidden_state_size,
+                 sentence_length,
+                 vocabulary_size,
+                 down_project_size=None,
+                 pad_symbol=3):
         """
         Creates the LSTMCell
 
@@ -44,7 +48,14 @@ class LSTMCell:
                                 pad_symbol)
         self._create_one_step_graph(hidden_state_size, vocabulary_size, down_project_size)
 
-    def _create_main_graph(self, embedding_size, hidden_state_size, sentence_length, vocabulary_size, down_project_size,
+        self._create_summaries()
+
+    def _create_main_graph(self,
+                           embedding_size,
+                           hidden_state_size,
+                           sentence_length,
+                           vocabulary_size,
+                           down_project_size,
                            pad_symbol):
 
         with tf.name_scope('lstm_input'):
@@ -75,6 +86,8 @@ class LSTMCell:
             """
             self.input_sentence[:, 1:] are the true predicted words avoid using 
             the pad predictions for the loss to avoid decreasing the model capacity
+            
+            mask all pad symbols for the calculation of the loss function
             """
 
             mask = tf.cast(tf.not_equal(self._input_sentence[:, 1:], pad_symbol), tf.float32)
@@ -89,19 +102,22 @@ class LSTMCell:
 
             self._loss = tf.reduce_mean(loss_per_batch_sample)
 
-            self._loss_summary = tf.summary.scalar('loss', self._loss)
-
         with tf.name_scope('perplexity'):
             # noinspection PyUnresolvedReferences
             self._perplexity_per_sentence = tf.exp(loss_per_batch_sample)
-            self._average_perplexity = tf.reduce_mean(self._perplexity_per_sentence)
-
-            self._perplexity_summary = tf.summary.scalar('average_perplexity_per_sentence', self._average_perplexity)
+            self._average_perplexity = tf.reduce_mean(self._perplexity_per_sentence )
 
         with tf.name_scope("output_probabilities"):
             self._output_probabilities = tf.nn.softmax(outputs)
 
-    def _create_one_step_graph(self, hidden_state_size, vocabulary_size, down_project_size):
+    def _create_one_step_graph(self,
+                               hidden_state_size,
+                               vocabulary_size,
+                               down_project_size):
+        """
+        Creates a one step graph for the LSTM cell
+        Given one word and the current states, calculates the next most probable word and the next states
+        """
 
         with tf.name_scope("one_step"):
             self._one_step_word_index = tf.placeholder(tf.int32, [1], name="word_input")
@@ -123,6 +139,13 @@ class LSTMCell:
         """
         return self._lstm_cell.zero_state(size, tf.float32)
 
+    def _create_summaries(self):
+        """
+        Creates summaries for tensorboard visualizations
+        """
+        self._loss_summary = tf.summary.scalar('loss', self._loss)
+        self._perplexity_summary = tf.summary.scalar('average_perplexity_per_sentence', self._average_perplexity)
+
     @property
     def summaries(self):
         return [self._loss_summary, self._perplexity_summary]
@@ -140,12 +163,12 @@ class LSTMCell:
         return self._loss
 
     @property
-    def perplexity_per_sentence(self):
-        return self._perplexity_per_sentence
-
-    @property
     def average_perplexity(self):
         return self._average_perplexity
+
+    @property
+    def perplexity_per_sentence(self):
+        return self._perplexity_per_sentence
 
     @property
     def state_size(self):
