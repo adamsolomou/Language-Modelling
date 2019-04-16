@@ -4,15 +4,19 @@ import tensorflow as tf
 
 from tqdm import tqdm
 
+# Custom dependencies
+from utils import load_embedding
+
 class LanguageModel(object):
     
-    def __init__(self, vocab, sentence_len=30, embedding_dim=100, hidden_size=512):
+    def __init__(self, vocab, experiment_type, sentence_len=30, embedding_dim=100, hidden_size=512):
 
         self.vocab = vocab
+        self.experiment_type=experiment_type
         self.vocab_size = len(vocab)
         self.sentence_len = sentence_len
         self.embedding_dim = embedding_dim
-        self.hidden_size = hidden_size
+        self.hidden_size = hidden_size            
 
         # Construct the computational graph 
         self._model_graph()
@@ -68,6 +72,10 @@ class LanguageModel(object):
                     output, state = cell(word, state)
 
                     # Compute logits
+                    if self.experiment_type == 'C':
+                        output = tf.layers.dense(inputs=output, units=512, activation=None,
+                                kernel_initializer=tf.contrib.layers.xavier_initializer(), reuse=(t > 0), name="projection_layer")
+
                     logits = tf.layers.dense(inputs=output, units=self.vocab_size, activation=None, 
                                 kernel_initializer=tf.contrib.layers.xavier_initializer(), reuse=(t > 0), name="output_layer")
 
@@ -180,6 +188,10 @@ class LanguageModel(object):
 
             display_step = 3000
 
+            # Load word2vec embeddings 
+            if self.experiment_type == 'B' or 'C':
+                load_embedding(sess, self.vocab, self.embeddings, 'data/wordembeddings-dim100.word2vec', self.embedding_dim, self.vocab_size)
+
             for epoch in range(epochs):
 
                 print('Epoch %i' %(epoch+1))
@@ -251,7 +263,6 @@ class LanguageModel(object):
 
                 print('Mean perplexity over validation sentences at epoch %i: %f' %((epoch+1), mean_perplexity.eval()))
 
-            # TO BE FIXED SO THAT WE SAVE THE BEST MODEL!
             save_path = saver.save(sess, "model.ckpt")
 
             print("Model saved in path: %s" % save_path)

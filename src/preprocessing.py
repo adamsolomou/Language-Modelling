@@ -4,18 +4,21 @@ import collections
 import numpy as np
 import pandas as pd
 
-def fetch_data(train_file='sentences.train', valid_file='sentences.eval'):
+def fetch_data(train_file='sentences.train', valid_file='sentences.eval', test_file='sentences_test.txt'):
 
     f_train = open('data/%s' %train_file, 'r')
     f_valid = open('data/%s' %valid_file, 'r')
+    f_test  = open('data/%s' %test_file , 'r')
 
     train = f_train.readlines()
     valid = f_valid.readlines()
+    test  = f_test.readlines()
 
     f_train.close()
     f_valid.close()
+    f_test.close()
 
-    return (train, valid)
+    return (train, valid, test)
 
 def construct_vocab(corpus, vocab_size=20000, sentence_len=30, base_vocab={'<unk>': 0, '<bos>': 1, '<eos>': 2, '<pad>': 3}):
     """
