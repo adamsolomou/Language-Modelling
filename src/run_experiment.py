@@ -36,7 +36,7 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
     elif experiment_type == 'B':
         set_experiment_variables(512, None, True)
     elif experiment_type == 'C':
-        set_experiment_variables(1024, 512, False)
+        set_experiment_variables(1024, 512, True)
 
     print("\nExperiment Arguments:")
     for key in FLAGS.flag_values_dict():
