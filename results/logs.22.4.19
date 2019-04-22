@@ -1,0 +1,252 @@
+Sender: LSF System <lsfadmin@lo-s4-067>
+Subject: Job 1816500: <python src/sim.py> in cluster <leonhard> Done
+
+Job <python src/sim.py> was submitted from host <lo-login-02> by user <solomoua> in cluster <leonhard> at Mon Apr 22 01:41:04 2019
+Job was executed on host(s) <4*lo-s4-067>, in queue <gpu.24h>, as user <solomoua> in cluster <leonhard> at Mon Apr 22 01:41:12 2019
+</cluster/home/solomoua> was used as the home directory.
+</cluster/home/solomoua/NLU_LSTMCell> was used as the working directory.
+Started at Mon Apr 22 01:41:12 2019
+Terminated at Mon Apr 22 08:44:29 2019
+Results reported at Mon Apr 22 08:44:29 2019
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+python src/sim.py
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   27869.80 sec.
+    Max Memory :                                 3732 MB
+    Average Memory :                             2939.23 MB
+    Total Requested Memory :                     8192.00 MB
+    Delta Memory :                               4460.00 MB
+    Max Swap :                                   -
+    Max Processes :                              3
+    Max Threads :                                18
+    Run time :                                   25422 sec.
+    Turnaround time :                            25405 sec.
+
+The output (if any) follows:
+
+/cluster/home/solomoua/.local/lib64/python3.6/site-packages/smart_open/ssh.py:34: UserWarning: paramiko missing, opening SSH/SCP/SFTP paths will be disabled.  `pip install paramiko` to suppress
+  warnings.warn('paramiko missing, opening SSH/SCP/SFTP paths will be disabled.  `pip install paramiko` to suppress')
+WARNING:tensorflow:From /cluster/apps/python/3.6.4/lib64/python3.6/site-packages/tensorflow/contrib/learn/python/learn/datasets/base.py:198: retry (from tensorflow.contrib.learn.python.learn.datasets.base) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use the retry module or similar alternatives.
+2019-04-22 01:41:51.984653: I tensorflow/core/platform/cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-04-22 01:41:52.275296: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1344] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:07:00.0
+totalMemory: 10.92GiB freeMemory: 10.77GiB
+2019-04-22 01:41:52.275341: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-22 01:41:52.779450: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-22 01:41:52.779493: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-22 01:41:52.779502: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-22 01:41:52.780292: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10430 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:07:00.0, compute capability: 6.1)
+2019-04-22 03:54:40.871854: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-22 03:54:40.872567: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-22 03:54:40.872584: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-22 03:54:40.872591: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-22 03:54:40.873083: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10430 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:07:00.0, compute capability: 6.1)
+2019-04-22 03:55:57.658862: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-22 03:55:57.659068: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-22 03:55:57.659080: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-22 03:55:57.659087: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-22 03:55:57.659610: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10430 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:07:00.0, compute capability: 6.1)
+2019-04-22 03:56:11.297308: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-22 03:56:11.297881: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-22 03:56:11.297894: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-22 03:56:11.297901: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-22 03:56:11.298358: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10430 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:07:00.0, compute capability: 6.1)
+2019-04-22 06:09:07.954595: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-22 06:09:07.955179: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-22 06:09:07.955193: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-22 06:09:07.955200: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-22 06:09:07.955743: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10430 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:07:00.0, compute capability: 6.1)
+2019-04-22 06:10:25.668165: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-22 06:10:25.668658: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-22 06:10:25.668670: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-22 06:10:25.668677: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-22 06:10:25.669230: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10430 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:07:00.0, compute capability: 6.1)
+2019-04-22 06:10:39.743775: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-22 06:10:39.744434: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-22 06:10:39.744449: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-22 06:10:39.744457: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-22 06:10:39.744978: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10430 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:07:00.0, compute capability: 6.1)
+2019-04-22 08:42:52.882376: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-22 08:42:52.882648: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-22 08:42:52.882661: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-22 08:42:52.882669: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-22 08:42:52.883172: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10430 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:07:00.0, compute capability: 6.1)
+2019-04-22 08:44:11.915333: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-22 08:44:11.915774: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-22 08:44:11.915794: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-22 08:44:11.915803: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-22 08:44:11.916340: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10430 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:07:00.0, compute capability: 6.1)
+Total number of sentences with length greater than 28 tokens:  30167
+Total number of sentences with length greater than 28 tokens:  154
+Total number of sentences with length greater than 28 tokens:  0
+Training data matrix dimensions:  (1969833, 30)
+Validation data matrix dimensions:  (9846, 30)
+Testing data matrix dimensions:  (0, 30)
+Total number of parameters:  13515424
+Loading external embeddings from data/wordembeddings-dim100.word2vec
+<unk> not in embedding file
+<bos> not in embedding file
+<eos> not in embedding file
+<pad> not in embedding file
+19996 words out of 20000 could be loaded
+Epoch 1
+Average perplexity over validation sentences at step 0: 19018.732422
+Average perplexity over validation sentences at step 3000: 93.302650
+Average perplexity over validation sentences at step 6000: 83.169472
+Average perplexity over validation sentences at step 9000: 79.546761
+Average perplexity over validation sentences at step 12000: 76.897736
+Average perplexity over validation sentences at step 15000: 75.679848
+Average perplexity over validation sentences at step 18000: 75.095337
+Average perplexity over validation sentences at step 21000: 73.043739
+Average perplexity over validation sentences at step 24000: 73.216454
+Average perplexity over validation sentences at step 27000: 72.987137
+Average perplexity over validation sentences at step 30000: 72.143555
+Average training loss per step at epoch 1: 3.794744
+Mean perplexity over validation sentences at epoch 1: 72.225159
+Epoch 2
+Average perplexity over validation sentences at step 0: 72.200905
+Average perplexity over validation sentences at step 3000: 73.285255
+Average perplexity over validation sentences at step 6000: 73.546959
+Average perplexity over validation sentences at step 9000: 73.751259
+Average perplexity over validation sentences at step 12000: 73.429359
+Average perplexity over validation sentences at step 15000: 73.645523
+Average perplexity over validation sentences at step 18000: 73.709892
+Average perplexity over validation sentences at step 21000: 73.430191
+Average perplexity over validation sentences at step 24000: 72.708473
+Average perplexity over validation sentences at step 27000: 72.528625
+Average perplexity over validation sentences at step 30000: 72.755898
+Average training loss per step at epoch 2: 3.643061
+Mean perplexity over validation sentences at epoch 2: 73.254738
+Epoch 3
+Average perplexity over validation sentences at step 0: 73.229477
+Average perplexity over validation sentences at step 3000: 74.327911
+Average perplexity over validation sentences at step 6000: 75.680298
+Average perplexity over validation sentences at step 9000: 74.488731
+Average perplexity over validation sentences at step 12000: 74.594254
+Average perplexity over validation sentences at step 15000: 75.156723
+Average perplexity over validation sentences at step 18000: 74.675606
+Average perplexity over validation sentences at step 21000: 74.451385
+Average perplexity over validation sentences at step 24000: 74.939117
+Average perplexity over validation sentences at step 27000: 74.310410
+Average perplexity over validation sentences at step 30000: 74.474213
+Average training loss per step at epoch 3: 3.608953
+Mean perplexity over validation sentences at epoch 3: 74.053055
+Model saved in path: ./model.ckpt
+Model restored.
+Model restored.
+Total number of parameters:  13515424
+Loading external embeddings from data/wordembeddings-dim100.word2vec
+<unk> not in embedding file
+<bos> not in embedding file
+<eos> not in embedding file
+<pad> not in embedding file
+19996 words out of 20000 could be loaded
+Epoch 1
+Average perplexity over validation sentences at step 0: 18981.929688
+Average perplexity over validation sentences at step 3000: 92.917679
+Average perplexity over validation sentences at step 6000: 82.499107
+Average perplexity over validation sentences at step 9000: 79.262024
+Average perplexity over validation sentences at step 12000: 76.670090
+Average perplexity over validation sentences at step 15000: 74.595428
+Average perplexity over validation sentences at step 18000: 74.923119
+Average perplexity over validation sentences at step 21000: 73.577408
+Average perplexity over validation sentences at step 24000: 72.180275
+Average perplexity over validation sentences at step 27000: 73.206474
+Average perplexity over validation sentences at step 30000: 73.085587
+Average training loss per step at epoch 1: 3.792373
+Mean perplexity over validation sentences at epoch 1: 72.864685
+Epoch 2
+Average perplexity over validation sentences at step 0: 72.859978
+Average perplexity over validation sentences at step 3000: 73.971809
+Average perplexity over validation sentences at step 6000: 73.972443
+Average perplexity over validation sentences at step 9000: 74.700363
+Average perplexity over validation sentences at step 12000: 74.143387
+Average perplexity over validation sentences at step 15000: 74.338150
+Average perplexity over validation sentences at step 18000: 74.209625
+Average perplexity over validation sentences at step 21000: 73.637268
+Average perplexity over validation sentences at step 24000: 73.392708
+Average perplexity over validation sentences at step 27000: 74.432884
+Average perplexity over validation sentences at step 30000: 73.504807
+Average training loss per step at epoch 2: 3.640154
+Mean perplexity over validation sentences at epoch 2: 73.456436
+Epoch 3
+Average perplexity over validation sentences at step 0: 73.478188
+Average perplexity over validation sentences at step 3000: 76.873268
+Average perplexity over validation sentences at step 6000: 76.967415
+Average perplexity over validation sentences at step 9000: 76.672882
+Average perplexity over validation sentences at step 12000: 76.294609
+Average perplexity over validation sentences at step 15000: 76.288521
+Average perplexity over validation sentences at step 18000: 75.530441
+Average perplexity over validation sentences at step 21000: 77.374725
+Average perplexity over validation sentences at step 24000: 76.839249
+Average perplexity over validation sentences at step 27000: 75.924187
+Average perplexity over validation sentences at step 30000: 74.723244
+Average training loss per step at epoch 3: 3.605484
+Mean perplexity over validation sentences at epoch 3: 73.630577
+Model saved in path: ./model.ckpt
+Model restored.
+Model restored.
+Total number of parameters:  17392800
+Loading external embeddings from data/wordembeddings-dim100.word2vec
+<unk> not in embedding file
+<bos> not in embedding file
+<eos> not in embedding file
+<pad> not in embedding file
+19996 words out of 20000 could be loaded
+Epoch 1
+Average perplexity over validation sentences at step 0: 17939.398438
+Average perplexity over validation sentences at step 3000: 91.128288
+Average perplexity over validation sentences at step 6000: 80.282318
+Average perplexity over validation sentences at step 9000: 76.032745
+Average perplexity over validation sentences at step 12000: 73.944946
+Average perplexity over validation sentences at step 15000: 74.042900
+Average perplexity over validation sentences at step 18000: 70.651741
+Average perplexity over validation sentences at step 21000: 70.714462
+Average perplexity over validation sentences at step 24000: 70.056961
+Average perplexity over validation sentences at step 27000: 68.797363
+Average perplexity over validation sentences at step 30000: 67.297523
+Average training loss per step at epoch 1: 3.731686
+Mean perplexity over validation sentences at epoch 1: 67.518753
+Epoch 2
+Average perplexity over validation sentences at step 0: 67.393341
+Average perplexity over validation sentences at step 3000: 67.499443
+Average perplexity over validation sentences at step 6000: 67.537910
+Average perplexity over validation sentences at step 9000: 68.773163
+Average perplexity over validation sentences at step 12000: 67.203613
+Average perplexity over validation sentences at step 15000: 66.167900
+Average perplexity over validation sentences at step 18000: 66.525826
+Average perplexity over validation sentences at step 21000: 64.963478
+Average perplexity over validation sentences at step 24000: 65.296700
+Average perplexity over validation sentences at step 27000: 66.088928
+Average perplexity over validation sentences at step 30000: 65.133850
+Average training loss per step at epoch 2: 3.576643
+Mean perplexity over validation sentences at epoch 2: 65.038055
+Epoch 3
+Average perplexity over validation sentences at step 0: 64.972549
+Average perplexity over validation sentences at step 3000: 65.239624
+Average perplexity over validation sentences at step 6000: 65.700935
+Average perplexity over validation sentences at step 9000: 65.497543
+Average perplexity over validation sentences at step 12000: 65.492973
+Average perplexity over validation sentences at step 15000: 65.471039
+Average perplexity over validation sentences at step 18000: 65.523872
+Average perplexity over validation sentences at step 21000: 65.322166
+Average perplexity over validation sentences at step 24000: 65.131256
+Average perplexity over validation sentences at step 27000: 63.994141
+Average perplexity over validation sentences at step 30000: 63.727573
+Average training loss per step at epoch 3: 3.520850
+Mean perplexity over validation sentences at epoch 3: 64.136581
+Model saved in path: ./model.ckpt
+Model restored.
+Model restored.
