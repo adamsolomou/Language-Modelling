@@ -6,9 +6,9 @@ import pandas as pd
 
 def fetch_data(train_file='sentences.train', valid_file='sentences.eval', test_file='sentences_test.txt'):
 
-    f_train = open('data/%s' %train_file, 'r')
-    f_valid = open('data/%s' %valid_file, 'r')
-    f_test  = open('data/%s' %test_file , 'r')
+    f_train = open('data/data/%s' %train_file, 'r')
+    f_valid = open('data/data/%s' %valid_file, 'r')
+    f_test  = open('data/data/%s' %test_file , 'r')
 
     train = f_train.readlines()
     valid = f_valid.readlines()
@@ -123,6 +123,7 @@ def encode_text(corpus, vocab, sentence_len=30):
     print("Total number of sentences with length greater than 28 tokens: ", long_count)
 
     # Remove rows that correspond to ignored sentences
-    data = data[:-long_count,:]
+    if long_count > 0:
+        data = data[:-long_count,:]
 
     return data

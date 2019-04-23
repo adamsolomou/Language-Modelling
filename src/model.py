@@ -1,8 +1,7 @@
+import os 
 import sklearn 
 import numpy as np 
 import tensorflow as tf
-
-from tqdm import tqdm
 
 # Custom dependencies
 from utils import load_embedding
@@ -30,6 +29,8 @@ class LanguageModel(object):
         self : object
             An instance of self
         """
+        # Reset default graph 
+        tf.reset_default_graph()
 
         with tf.name_scope("Model"):
             # Input sentence
@@ -189,7 +190,8 @@ class LanguageModel(object):
             display_step = 3000
 
             # Load word2vec embeddings 
-            if self.experiment_type == 'B' or 'C':
+            if self.experiment_type == 'B' or self.experiment_type == 'C':
+                print('Loading word2vec embeddings')
                 load_embedding(sess, self.vocab, self.embeddings, 'data/wordembeddings-dim100.word2vec', self.embedding_dim, self.vocab_size)
 
             for epoch in range(epochs):
@@ -201,7 +203,7 @@ class LanguageModel(object):
 
                 e_train_loss = 0
 
-                for i in tqdm(range(train_steps)):
+                for i in range(train_steps):
 
                     # Get mini-batch 
                     batch_x = x[i*batch_size:(i+1)*batch_size, :]
@@ -263,7 +265,7 @@ class LanguageModel(object):
 
                 print('Mean perplexity over validation sentences at epoch %i: %f' %((epoch+1), mean_perplexity.eval()))
 
-            save_path = saver.save(sess, "model.ckpt")
+            save_path = saver.save(sess, "./model.ckpt")
 
             print("Model saved in path: %s" % save_path)
 
@@ -300,7 +302,7 @@ class LanguageModel(object):
         with tf.Session() as sess:
 
             # Restore trained model 
-            saver.restore(sess, "model.ckpt")
+            saver.restore(sess, "./model.ckpt")
             print("Model restored.")
 
             for i in range(n_steps):

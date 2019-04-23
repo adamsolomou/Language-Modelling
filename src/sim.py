@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+
 import numpy as np 
 import tensorflow as tf
 
@@ -26,25 +29,16 @@ if __name__ == '__main__':
     #                              Experiment A
 
     ############################################################################
-    model = model.LanguageModel(vocab=vocab, experiment_type='A')
+    model_A = model.LanguageModel(vocab=vocab, experiment_type='A')
 
-    print('Total number of parameters: ', model.total_params())
+    print('Total number of parameters: ', model_A.total_params())
 
-    model.fit(train_data, val_data=valid_data)
-
-    # Validation 
-    val_res = model.evaluate(valid_data)
-
-    with open('validation_perplexity_Α', 'w') as f:
-        for res in val_res['perp_per_sent']:
-            f.write("%s\n" % res)
-
-    f.close()
+    model_A.fit(train_data, val_data=valid_data, epochs=4)
 
     # Testing 
-    test_res = model.evaluate(test_data)
+    test_res = model_A.evaluate(test_data)
 
-    with open('test_perplexity_Α', 'w') as f:
+    with open('test.perplexityΑ', 'w') as f:
         for res in test_res['perp_per_sent']:
             f.write("%s\n" % res)
 
@@ -55,25 +49,16 @@ if __name__ == '__main__':
     #                              Experiment B
 
     ############################################################################
-    model = model.LanguageModel(vocab=vocab, experiment_type='B')
+    model_B = model.LanguageModel(vocab=vocab, experiment_type='B')
 
-    print('Total number of parameters: ', model.total_params())
+    print('Total number of parameters: ', model_B.total_params())
 
-    model.fit(train_data, val_data=valid_data)
-
-    # Validation 
-    val_res = model.evaluate(valid_data)
-
-    with open('validation_perplexity_B', 'w') as f:
-        for res in val_res['perp_per_sent']:
-            f.write("%s\n" % res)
-
-    f.close()
+    model_B.fit(train_data, val_data=valid_data, epochs=4)
 
     # Testing 
-    test_res = model.evaluate(test_data)
+    test_res = model_B.evaluate(test_data)
 
-    with open('test_perplexity_B', 'w') as f:
+    with open('test_perplexityB', 'w') as f:
         for res in test_res['perp_per_sent']:
             f.write("%s\n" % res)
 
@@ -84,26 +69,17 @@ if __name__ == '__main__':
     #                              Experiment C
 
     ############################################################################
-    model = model.LanguageModel(vocab=vocab, experiment_type='C', sentence_len=30, 
+    model_C = model.LanguageModel(vocab=vocab, experiment_type='C', sentence_len=30, 
                 embedding_dim=100, hidden_size=1024)
 
-    print('Total number of parameters: ', model.total_params())
+    print('Total number of parameters: ', model_C.total_params())
 
-    model.fit(train_data, val_data=valid_data)
-
-    # Validation 
-    val_res = model.evaluate(valid_data)
-
-    with open('validation_perplexity_C', 'w') as f:
-        for res in val_res['perp_per_sent']:
-            f.write("%s\n" % res)
-
-    f.close()
+    model_C.fit(train_data, val_data=valid_data, epochs=4)
 
     # Testing 
-    test_res = model.evaluate(test_data)
+    test_res = model_C.evaluate(test_data)
 
-    with open('test_perplexity_C', 'w') as f:
+    with open('test.perplexityC', 'w') as f:
         for res in test_res['perp_per_sent']:
             f.write("%s\n" % res)
 
