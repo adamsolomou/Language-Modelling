@@ -29,40 +29,40 @@ if __name__ == '__main__':
     #                              Experiment A
 
     ############################################################################
-    model_A = model.LanguageModel(vocab=vocab, experiment_type='A')
+    # model_A = model.LanguageModel(vocab=vocab, experiment_type='A')
 
-    print('Total number of parameters: ', model_A.total_params())
+    # print('Total number of parameters: ', model_A.total_params())
 
-    model_A.fit(train_data, val_data=valid_data, epochs=4)
+    # model_A.fit(train_data, val_data=valid_data, epochs=4)
 
-    # Testing 
-    test_res = model_A.evaluate(test_data)
+    # # Testing 
+    # test_res = model_A.evaluate(test_data)
 
-    with open('test.perplexityΑ', 'w') as f:
-        for res in test_res['perp_per_sent']:
-            f.write("%s\n" % res)
+    # with open('test.perplexityΑ', 'w') as f:
+    #     for res in test_res['perp_per_sent']:
+    #         f.write("%s\n" % res)
 
-    f.close()
+    # f.close()
 
     ############################################################################
 
     #                              Experiment B
 
     ############################################################################
-    model_B = model.LanguageModel(vocab=vocab, experiment_type='B')
+    # model_B = model.LanguageModel(vocab=vocab, experiment_type='B')
 
-    print('Total number of parameters: ', model_B.total_params())
+    # print('Total number of parameters: ', model_B.total_params())
 
-    model_B.fit(train_data, val_data=valid_data, epochs=4)
+    # model_B.fit(train_data, val_data=valid_data, epochs=4)
 
-    # Testing 
-    test_res = model_B.evaluate(test_data)
+    # # Testing 
+    # test_res = model_B.evaluate(test_data)
 
-    with open('test.perplexityB', 'w') as f:
-        for res in test_res['perp_per_sent']:
-            f.write("%s\n" % res)
+    # with open('test.perplexityB', 'w') as f:
+    #     for res in test_res['perp_per_sent']:
+    #         f.write("%s\n" % res)
 
-    f.close()
+    # f.close()
 
     ############################################################################
 
@@ -79,8 +79,8 @@ if __name__ == '__main__':
     # Testing 
     test_res = model_C.evaluate(test_data)
 
-    with open('test.perplexityC', 'w') as f:
-        for res in test_res['perp_per_sent']:
-            f.write("%s\n" % res)
+    # with open('test.perplexityC', 'w') as f:
+    #     for res in test_res['perp_per_sent']:
+    #         f.write("%s\n" % res)
 
-    f.close()
+    # f.close()

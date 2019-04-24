@@ -198,12 +198,12 @@ class LanguageModel(object):
 
                 print('Epoch %i' %(epoch+1))
 
-                if shuffle: 
-                    x = sklearn.utils.shuffle(x)
+                # if shuffle: 
+                #     x = sklearn.utils.shuffle(x)
 
                 e_train_loss = 0
 
-                for i in range(train_steps):
+                for i in range(int(train_steps/2)):
 
                     # Get mini-batch 
                     batch_x = x[i*batch_size:(i+1)*batch_size, :]
