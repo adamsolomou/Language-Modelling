@@ -91,7 +91,7 @@ class LanguageModel(object):
                 total_loss = tf.transpose(total_loss)
 
                 # Ignore '<pad>' symbols in loss computation 
-                mask = tf.cast(tf.math.not_equal(self._x[:,1:], self.vocab['<pad>']), dtype=tf.float32)
+                mask = tf.cast(tf.not_equal(self._x[:,1:], self.vocab['<pad>']), dtype=tf.float32)
 
                 total_loss = mask * total_loss
 

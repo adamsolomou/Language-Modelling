@@ -6,9 +6,9 @@ import pandas as pd
 
 def fetch_data(train_file='sentences.train', valid_file='sentences.eval', test_file='sentences_test.txt'):
 
-    f_train = open('data/data/%s' %train_file, 'r')
-    f_valid = open('data/data/%s' %valid_file, 'r')
-    f_test  = open('data/data/%s' %test_file , 'r')
+    f_train = open('data/%s' %train_file, 'r')
+    f_valid = open('data/%s' %valid_file, 'r')
+    f_test  = open('data/%s' %test_file , 'r')
 
     train = f_train.readlines()
     valid = f_valid.readlines()

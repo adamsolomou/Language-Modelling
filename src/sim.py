@@ -58,7 +58,7 @@ if __name__ == '__main__':
     # Testing 
     test_res = model_B.evaluate(test_data)
 
-    with open('test_perplexityB', 'w') as f:
+    with open('test.perplexityB', 'w') as f:
         for res in test_res['perp_per_sent']:
             f.write("%s\n" % res)
 
