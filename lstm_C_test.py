@@ -562,7 +562,7 @@ class Network:
 
 # PREPROCESSING SETTINGS
 
-num_sentences = 1000000  # Number of senteces to be read from the training file
+num_sentences = 1800000  # Number of senteces to be read from the training file
 max_length = 30 # Max length of the sentence to be kept. Notice that <bos> and eos should also be included
 vocab_size = 20000 - 4 # Number of words in the vocabulary. Subtract by 4 to include special characters
 extra_words = ['<bos>','<unk>','<pad>','<eos>'] # Special words
@@ -581,16 +581,15 @@ dataset = encoder.encode_dataset(sentences)
 network = Network(dataset, state_size=1024, use_projection=True, pretrained_embeddings=True, projection_size=512, )
 network.train(num_epochs=4)
 
-# evaluation_sentences = get_sentences_from_file(path=eval_path)
-# evaluation_set = encoder.encode_dataset(evaluation_sentences)
-# preps = network.evaluate(evaluation_set)
-# print(np.mean(preps))
+evaluation_sentences = get_sentences_from_file(path=eval_path)
+evaluation_set = encoder.encode_dataset(evaluation_sentences)
+preps = network.evaluate(evaluation_set)
+print("Evaluation:",np.mean(preps))
 
 test_sentences = get_sentences_from_file(path=test_path)
 test_set = encoder.encode_dataset(test_sentences)
-
 preps = network.test(test_set)
-print(np.mean(preps))
+print("Test:",np.mean(preps))
 
 
 
