@@ -1,0 +1,272 @@
+Sender: LSF System <lsfadmin@lo-s4-050>
+Subject: Job 1822061: <python src/sim.py> in cluster <leonhard> Done
+
+Job <python src/sim.py> was submitted from host <lo-login-01> by user <solomoua> in cluster <leonhard> at Tue Apr 23 23:06:00 2019
+Job was executed on host(s) <4*lo-s4-050>, in queue <gpu.24h>, as user <solomoua> in cluster <leonhard> at Tue Apr 23 23:06:02 2019
+</cluster/home/solomoua> was used as the home directory.
+</cluster/home/solomoua/NLU_LSTMCell> was used as the working directory.
+Started at Tue Apr 23 23:06:02 2019
+Terminated at Wed Apr 24 10:28:49 2019
+Results reported at Wed Apr 24 10:28:49 2019
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+python src/sim.py
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   44666.08 sec.
+    Max Memory :                                 3876 MB
+    Average Memory :                             2911.96 MB
+    Total Requested Memory :                     8192.00 MB
+    Delta Memory :                               4316.00 MB
+    Max Swap :                                   -
+    Max Processes :                              3
+    Max Threads :                                26
+    Run time :                                   40985 sec.
+    Turnaround time :                            40969 sec.
+
+The output (if any) follows:
+
+/cluster/home/solomoua/.local/lib64/python3.6/site-packages/smart_open/ssh.py:34: UserWarning: paramiko missing, opening SSH/SCP/SFTP paths will be disabled.  `pip install paramiko` to suppress
+  warnings.warn('paramiko missing, opening SSH/SCP/SFTP paths will be disabled.  `pip install paramiko` to suppress')
+WARNING:tensorflow:From /cluster/apps/python/3.6.4/lib64/python3.6/site-packages/tensorflow/contrib/learn/python/learn/datasets/base.py:198: retry (from tensorflow.contrib.learn.python.learn.datasets.base) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use the retry module or similar alternatives.
+2019-04-23 23:06:45.298445: I tensorflow/core/platform/cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-04-23 23:06:45.555688: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1344] Found device 0 with properties: 
+name: GeForce GTX 1080 major: 6 minor: 1 memoryClockRate(GHz): 1.7335
+pciBusID: 0000:04:00.0
+totalMemory: 7.93GiB freeMemory: 7.82GiB
+2019-04-23 23:06:45.555751: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-23 23:06:46.087741: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-23 23:06:46.087808: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-23 23:06:46.087818: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-23 23:06:46.088462: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7554 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080, pci bus id: 0000:04:00.0, compute capability: 6.1)
+2019-04-24 02:49:32.035347: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-24 02:49:32.035890: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-24 02:49:32.035903: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-24 02:49:32.035909: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-24 02:49:32.036542: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7554 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080, pci bus id: 0000:04:00.0, compute capability: 6.1)
+2019-04-24 02:51:06.949416: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-24 02:51:06.949889: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-24 02:51:06.949914: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-24 02:51:06.949929: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-24 02:51:06.950565: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7554 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080, pci bus id: 0000:04:00.0, compute capability: 6.1)
+2019-04-24 06:20:39.185945: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-24 06:20:39.186419: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-24 06:20:39.186430: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-24 06:20:39.186436: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-24 06:20:39.187044: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7554 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080, pci bus id: 0000:04:00.0, compute capability: 6.1)
+2019-04-24 06:22:21.823314: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-24 06:22:21.823586: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-24 06:22:21.823597: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-24 06:22:21.823604: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-24 06:22:21.824149: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7554 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080, pci bus id: 0000:04:00.0, compute capability: 6.1)
+2019-04-24 10:26:41.852114: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1423] Adding visible gpu devices: 0
+2019-04-24 10:26:41.852404: I tensorflow/core/common_runtime/gpu/gpu_device.cc:911] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-04-24 10:26:41.852417: I tensorflow/core/common_runtime/gpu/gpu_device.cc:917]      0 
+2019-04-24 10:26:41.852433: I tensorflow/core/common_runtime/gpu/gpu_device.cc:930] 0:   N 
+2019-04-24 10:26:41.853155: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1041] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 7554 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080, pci bus id: 0000:04:00.0, compute capability: 6.1)
+Total number of sentences with length greater than 28 tokens:  30167
+Total number of sentences with length greater than 28 tokens:  154
+Total number of sentences with length greater than 28 tokens:  0
+Training data matrix dimensions:  (1969833, 30)
+Validation data matrix dimensions:  (9846, 30)
+Testing data matrix dimensions:  (10000, 30)
+Total number of parameters:  13515424
+Epoch 1
+Average perplexity over validation sentences at step 0: 19896.208984
+Average perplexity over validation sentences at step 3000: 123.062973
+Average perplexity over validation sentences at step 6000: 101.167984
+Average perplexity over validation sentences at step 9000: 92.272331
+Average perplexity over validation sentences at step 12000: 86.232864
+Average perplexity over validation sentences at step 15000: 82.815430
+Average perplexity over validation sentences at step 18000: 79.837006
+Average perplexity over validation sentences at step 21000: 77.456200
+Average perplexity over validation sentences at step 24000: 76.087311
+Average perplexity over validation sentences at step 27000: 74.906578
+Average perplexity over validation sentences at step 30000: 74.259003
+Average training loss per step at epoch 1: 3.912926
+Mean perplexity over validation sentences at epoch 1: 73.452118
+Epoch 2
+Average perplexity over validation sentences at step 0: 73.431961
+Average perplexity over validation sentences at step 3000: 74.284843
+Average perplexity over validation sentences at step 6000: 75.006920
+Average perplexity over validation sentences at step 9000: 73.196426
+Average perplexity over validation sentences at step 12000: 71.794281
+Average perplexity over validation sentences at step 15000: 71.835823
+Average perplexity over validation sentences at step 18000: 70.946854
+Average perplexity over validation sentences at step 21000: 69.613068
+Average perplexity over validation sentences at step 24000: 70.052254
+Average perplexity over validation sentences at step 27000: 70.229271
+Average perplexity over validation sentences at step 30000: 68.894135
+Average training loss per step at epoch 2: 3.635056
+Mean perplexity over validation sentences at epoch 2: 68.925537
+Epoch 3
+Average perplexity over validation sentences at step 0: 68.974419
+Average perplexity over validation sentences at step 3000: 70.876389
+Average perplexity over validation sentences at step 6000: 71.190224
+Average perplexity over validation sentences at step 9000: 71.697037
+Average perplexity over validation sentences at step 12000: 70.228737
+Average perplexity over validation sentences at step 15000: 69.838745
+Average perplexity over validation sentences at step 18000: 70.071899
+Average perplexity over validation sentences at step 21000: 70.679230
+Average perplexity over validation sentences at step 24000: 69.677666
+Average perplexity over validation sentences at step 27000: 69.000847
+Average perplexity over validation sentences at step 30000: 68.835426
+Average training loss per step at epoch 3: 3.563976
+Mean perplexity over validation sentences at epoch 3: 68.739601
+Epoch 4
+Average perplexity over validation sentences at step 0: 68.745308
+Average perplexity over validation sentences at step 3000: 71.737701
+Average perplexity over validation sentences at step 6000: 70.965645
+Average perplexity over validation sentences at step 9000: 72.905327
+Average perplexity over validation sentences at step 12000: 72.245087
+Average perplexity over validation sentences at step 15000: 73.274246
+Average perplexity over validation sentences at step 18000: 71.252167
+Average perplexity over validation sentences at step 21000: 70.116104
+Average perplexity over validation sentences at step 24000: 70.954597
+Average perplexity over validation sentences at step 27000: 69.486443
+Average perplexity over validation sentences at step 30000: 69.151573
+Average training loss per step at epoch 4: 3.525357
+Mean perplexity over validation sentences at epoch 4: 68.972954
+Model saved in path: ./model.ckpt
+Model restored.
+Total number of parameters:  13515424
+Loading word2vec embeddings
+Loading external embeddings from data/wordembeddings-dim100.word2vec
+<unk> not in embedding file
+<bos> not in embedding file
+<eos> not in embedding file
+<pad> not in embedding file
+19996 words out of 20000 could be loaded
+Epoch 1
+Average perplexity over validation sentences at step 0: 18957.701172
+Average perplexity over validation sentences at step 3000: 94.350357
+Average perplexity over validation sentences at step 6000: 82.812401
+Average perplexity over validation sentences at step 9000: 80.128510
+Average perplexity over validation sentences at step 12000: 77.761505
+Average perplexity over validation sentences at step 15000: 75.467476
+Average perplexity over validation sentences at step 18000: 74.773224
+Average perplexity over validation sentences at step 21000: 74.351799
+Average perplexity over validation sentences at step 24000: 74.405731
+Average perplexity over validation sentences at step 27000: 73.349220
+Average perplexity over validation sentences at step 30000: 73.341095
+Average training loss per step at epoch 1: 3.795153
+Mean perplexity over validation sentences at epoch 1: 73.031685
+Epoch 2
+Average perplexity over validation sentences at step 0: 73.015266
+Average perplexity over validation sentences at step 3000: 74.329224
+Average perplexity over validation sentences at step 6000: 74.623383
+Average perplexity over validation sentences at step 9000: 75.283203
+Average perplexity over validation sentences at step 12000: 74.418625
+Average perplexity over validation sentences at step 15000: 73.956406
+Average perplexity over validation sentences at step 18000: 75.015854
+Average perplexity over validation sentences at step 21000: 74.737785
+Average perplexity over validation sentences at step 24000: 73.421600
+Average perplexity over validation sentences at step 27000: 74.470963
+Average perplexity over validation sentences at step 30000: 74.549957
+Average training loss per step at epoch 2: 3.642184
+Mean perplexity over validation sentences at epoch 2: 73.700333
+Epoch 3
+Average perplexity over validation sentences at step 0: 73.743744
+Average perplexity over validation sentences at step 3000: 76.842270
+Average perplexity over validation sentences at step 6000: 75.928520
+Average perplexity over validation sentences at step 9000: 75.432541
+Average perplexity over validation sentences at step 12000: 75.388107
+Average perplexity over validation sentences at step 15000: 76.126404
+Average perplexity over validation sentences at step 18000: 76.868347
+Average perplexity over validation sentences at step 21000: 78.851814
+Average perplexity over validation sentences at step 24000: 76.856506
+Average perplexity over validation sentences at step 27000: 75.986229
+Average perplexity over validation sentences at step 30000: 74.725883
+Average training loss per step at epoch 3: 3.608339
+Mean perplexity over validation sentences at epoch 3: 74.351479
+Epoch 4
+Average perplexity over validation sentences at step 0: 74.359756
+Average perplexity over validation sentences at step 3000: 76.384918
+Average perplexity over validation sentences at step 6000: 76.243958
+Average perplexity over validation sentences at step 9000: 77.031693
+Average perplexity over validation sentences at step 12000: 76.869705
+Average perplexity over validation sentences at step 15000: 76.450356
+Average perplexity over validation sentences at step 18000: 76.742134
+Average perplexity over validation sentences at step 21000: 76.545876
+Average perplexity over validation sentences at step 24000: 76.393715
+Average perplexity over validation sentences at step 27000: 77.198471
+Average perplexity over validation sentences at step 30000: 77.835983
+Average training loss per step at epoch 4: 3.590056
+Mean perplexity over validation sentences at epoch 4: 76.114334
+Model saved in path: ./model.ckpt
+Model restored.
+Total number of parameters:  17392800
+Loading word2vec embeddings
+Loading external embeddings from data/wordembeddings-dim100.word2vec
+<unk> not in embedding file
+<bos> not in embedding file
+<eos> not in embedding file
+<pad> not in embedding file
+19996 words out of 20000 could be loaded
+Epoch 1
+Average perplexity over validation sentences at step 0: 17782.136719
+Average perplexity over validation sentences at step 3000: 91.745689
+Average perplexity over validation sentences at step 6000: 80.216705
+Average perplexity over validation sentences at step 9000: 76.180641
+Average perplexity over validation sentences at step 12000: 74.302986
+Average perplexity over validation sentences at step 15000: 72.866455
+Average perplexity over validation sentences at step 18000: 71.795273
+Average perplexity over validation sentences at step 21000: 70.209946
+Average perplexity over validation sentences at step 24000: 70.640099
+Average perplexity over validation sentences at step 27000: 69.659828
+Average perplexity over validation sentences at step 30000: 67.457611
+Average training loss per step at epoch 1: 3.732052
+Mean perplexity over validation sentences at epoch 1: 66.877899
+Epoch 2
+Average perplexity over validation sentences at step 0: 67.048622
+Average perplexity over validation sentences at step 3000: 67.876373
+Average perplexity over validation sentences at step 6000: 69.035522
+Average perplexity over validation sentences at step 9000: 68.155098
+Average perplexity over validation sentences at step 12000: 67.639565
+Average perplexity over validation sentences at step 15000: 66.683403
+Average perplexity over validation sentences at step 18000: 66.056145
+Average perplexity over validation sentences at step 21000: 65.862175
+Average perplexity over validation sentences at step 24000: 65.628502
+Average perplexity over validation sentences at step 27000: 65.665123
+Average perplexity over validation sentences at step 30000: 64.595329
+Average training loss per step at epoch 2: 3.576954
+Mean perplexity over validation sentences at epoch 2: 65.685638
+Epoch 3
+Average perplexity over validation sentences at step 0: 65.425545
+Average perplexity over validation sentences at step 3000: 66.584389
+Average perplexity over validation sentences at step 6000: 65.642029
+Average perplexity over validation sentences at step 9000: 66.768921
+Average perplexity over validation sentences at step 12000: 66.268387
+Average perplexity over validation sentences at step 15000: 64.391815
+Average perplexity over validation sentences at step 18000: 65.648506
+Average perplexity over validation sentences at step 21000: 65.128342
+Average perplexity over validation sentences at step 24000: 65.544937
+Average perplexity over validation sentences at step 27000: 64.322029
+Average perplexity over validation sentences at step 30000: 64.443443
+Average training loss per step at epoch 3: 3.521342
+Mean perplexity over validation sentences at epoch 3: 64.416656
+Epoch 4
+Average perplexity over validation sentences at step 0: 64.315102
+Average perplexity over validation sentences at step 3000: 65.831520
+Average perplexity over validation sentences at step 6000: 66.059052
+Average perplexity over validation sentences at step 9000: 65.324310
+Average perplexity over validation sentences at step 12000: 65.788788
+Average perplexity over validation sentences at step 15000: 65.273903
+Average perplexity over validation sentences at step 18000: 64.742950
+Average perplexity over validation sentences at step 21000: 65.447083
+Average perplexity over validation sentences at step 24000: 64.661964
+Average perplexity over validation sentences at step 27000: 64.634361
+Average perplexity over validation sentences at step 30000: 65.494804
+Average training loss per step at epoch 4: 3.483452
+Mean perplexity over validation sentences at epoch 4: 65.605736
+Model saved in path: ./model.ckpt
+Model restored.
