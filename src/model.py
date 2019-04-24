@@ -203,7 +203,7 @@ class LanguageModel(object):
 
                 e_train_loss = 0
 
-                for i in range(int(train_steps/2)):
+                for i in range(train_steps):
 
                     # Get mini-batch 
                     batch_x = x[i*batch_size:(i+1)*batch_size, :]

@@ -26,6 +26,27 @@ if __name__ == '__main__':
 
     ############################################################################
 
+    #                              Experiment C
+
+    ############################################################################
+    model_C = model.LanguageModel(vocab=vocab, experiment_type='C', sentence_len=30, 
+                embedding_dim=100, hidden_size=1024)
+
+    print('Total number of parameters: ', model_C.total_params())
+
+    model_C.fit(train_data, val_data=valid_data, epochs=4)
+
+    # Testing 
+    test_res = model_C.evaluate(test_data)
+
+    # with open('test.perplexityC', 'w') as f:
+    #     for res in test_res['perp_per_sent']:
+    #         f.write("%s\n" % res)
+
+    # f.close()
+
+    ############################################################################
+
     #                              Experiment A
 
     ############################################################################
@@ -59,27 +80,6 @@ if __name__ == '__main__':
     # test_res = model_B.evaluate(test_data)
 
     # with open('test.perplexityB', 'w') as f:
-    #     for res in test_res['perp_per_sent']:
-    #         f.write("%s\n" % res)
-
-    # f.close()
-
-    ############################################################################
-
-    #                              Experiment C
-
-    ############################################################################
-    model_C = model.LanguageModel(vocab=vocab, experiment_type='C', sentence_len=30, 
-                embedding_dim=100, hidden_size=1024)
-
-    print('Total number of parameters: ', model_C.total_params())
-
-    model_C.fit(train_data, val_data=valid_data, epochs=4)
-
-    # Testing 
-    test_res = model_C.evaluate(test_data)
-
-    # with open('test.perplexityC', 'w') as f:
     #     for res in test_res['perp_per_sent']:
     #         f.write("%s\n" % res)
 
