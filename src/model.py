@@ -198,8 +198,8 @@ class LanguageModel(object):
 
                 print('Epoch %i' %(epoch+1))
 
-                # if shuffle: 
-                #     x = sklearn.utils.shuffle(x)
+                if shuffle: 
+                    x = sklearn.utils.shuffle(x)
 
                 e_train_loss = 0
 
