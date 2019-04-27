@@ -137,7 +137,7 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
 
             print('Perplexity on test_set is', np.mean(perplexities))
 
-            filename = "perplexities-exp-{}.out".format(experiment_type)
+            filename = "group25.perplexity{}".format(experiment_type)
             savefile = os.path.join(save_results_folder, filename)
             print('Saving results to', savefile)
 
@@ -147,7 +147,7 @@ def run_experiment(experiment_type, data_folder, save_model_folder, save_results
             if experiment_type == 'C':
                 continuation_sentences = continue_sentences(continuation_corpus, session, lstm, data_processing)
 
-                filename = "continuation-sentences-exp-{}.out".format(experiment_type)
+                filename = "group25.continuation"
                 savefile = os.path.join(save_results_folder, filename)
                 print('Saving results to', savefile)
 

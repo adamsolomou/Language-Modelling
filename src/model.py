@@ -58,6 +58,7 @@ class LSTMCell:
                            down_project_size,
                            pad_symbol):
 
+        # input sentences shape=(batch_size, sentence_length)
         with tf.name_scope('lstm_input'):
             self._input_sentence = tf.placeholder(tf.int32, shape=[None, sentence_length], name='input_sentence')
 
@@ -84,10 +85,10 @@ class LSTMCell:
 
         with tf.name_scope('cross_entropy_loss'):
             """
-            self.input_sentence[:, 1:] are the true predicted words avoid using 
-            the pad predictions for the loss to avoid decreasing the model capacity
+            Compare thethe true predicted words, that is self.input_sentence[:, 1:] with the model predictions 
             
-            mask all pad symbols for the calculation of the loss function
+            Remove pad predictions for the loss to avoid decreasing the model capacity. 
+            Do that by adding a mask to all pad symbols.
             """
 
             mask = tf.cast(tf.not_equal(self._input_sentence[:, 1:], pad_symbol), tf.float32)
